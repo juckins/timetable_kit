@@ -1,9 +1,9 @@
 title = "Ethan Allen Express Timetable"
-heading = "Ethan Allen Express & Burlington Buses"
+heading = "Ethan Allen Express"
 aria_label = "Ethan Allen Express"
 reference_date = "20240620"
 key_on_right = true
 key_bus = true
 use_bus_icon_in_cells = true
-landscape = true
+landscape = false
 for_rpa = true
