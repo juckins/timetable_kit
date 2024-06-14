@@ -16,4 +16,4 @@ You need to specify the agency.::
 This works::
 
   * timetable.py --agency via --get-gtfs
-  * timetable.py --agency via ocean
+  * timetable.py --agency via --spec ocean
