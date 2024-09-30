@@ -53,6 +53,8 @@ sleeper_trains = {
     "20",  # Crescent
     "29",
     "30",  # CL
+    "40",
+    "41",  # Floridian 
     "48",
     "49",
     "448",
