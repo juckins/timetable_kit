@@ -1,0 +1,9 @@
+title = "Floridian Timetable"
+heading = "Floridian"
+aria_label = "Floridian"
+reference_date = "20241110"
+key_baggage = true
+key_tz = true
+for_rpa = true
+bottom_text = "Note that the <i>Floridian</i> is a combined train that operates over the route of the <i>Silver Star</i> and the <i>Capitol Limited</i>.  The <i>Silver Star</i> (Trains 91 & 92) operates between Miami, FL and Washington, DC.  The <i>Capitol Limited</i> (Trains 29 & 30) operates between Washington, DC and Chicago, IL. The <i>Floridian</i> is expected to operate from November 10, 2024 through much of 2025."
+
