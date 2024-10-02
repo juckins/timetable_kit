@@ -1,5 +1,6 @@
 Keystone Service (Amtrak) Timetables
-keystone-service-weekday-wb
+keystone-service-mon-thu-wb
+keystone-service-friday-wb
 keystone-service-mon-thu-eb
 keystone-service-friday-eb
 keystone-service-weekend-wb

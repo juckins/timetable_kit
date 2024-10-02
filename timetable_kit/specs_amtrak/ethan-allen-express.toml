@@ -1,7 +1,7 @@
 title = "Ethan Allen Express Timetable"
 heading = "Ethan Allen Express"
 aria_label = "Ethan Allen Express"
-reference_date = "20240620"
+reference_date = "20241001"
 key_on_right = true
 key_bus = true
 use_bus_icon_in_cells = true

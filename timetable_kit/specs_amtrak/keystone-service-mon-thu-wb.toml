@@ -1,6 +1,6 @@
-title = "Keystone Weekend Westbound Timetable"
-heading = "Keystone Service & Pennsylvanian: Weekend Westbound"
-aria_label = "Keystone Weekend Westbound"
+title = "Keystone Monday-Thursday Westbound Timetable"
+heading = "Keystone Service & Pennsylvanian: Monday-Thursday Westbound"
+aria_label = "Keystone Monday-Thursday Westbound"
 top_text = "NOTE: Keystone work during fall 2024. Please see <b><a href=\"https://www.amtrak.com/service-alerts-and-notices\">https://www.amtrak.com/service-alerts-and-notices</a></b> for the latest schedule adjustments."
 reference_date = "20241001"
 landscape = true
@@ -9,4 +9,3 @@ key_d = true
 key_r = true
 compress_credits = true
 for_rpa = true
-key_on_right = true
