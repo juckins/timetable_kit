@@ -3,4 +3,5 @@ column-options,ardp,,,,reverse ardp
 days,DEN,,,,DEN
 updown,,,,,
 DEN,first,0,,,last
-WPR,last,62,,,first
+WPR,,62,,,
+WIP,last,67,,,first
