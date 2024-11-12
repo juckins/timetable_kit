@@ -1,4 +1,4 @@
-,43 / 29 noheader,mile,access,stations,42 / 30 noheader
+,43 / 40 noheader,mile,access,stations,42 / 41 noheader
 column-options,ardp,,,,reverse ardp
 days,PHL,,,,PHL
 updown,,,,,
@@ -19,8 +19,8 @@ JST,,366,,,
 LAB,,403,,,
 GNB,,413,,,
 PGH,43 last,444,,,42 first
-,"<div style=""text-align: center;"">connection<br>via Capitol Limited<br><b>#29</b></div>",,,,"<div style=""text-align: center;"">connection<br>via Capitol Limited<br><b>#30</b></div>"
-PGH,29 first,444,,,30 last
+,"<div style=""text-align: center;"">connection<br>via Floridian<br><b>#40</b></div>",,,,"<div style=""text-align: center;"">connection<br>via Floridian<br><b>#41</b></div>"
+PGH,40 first,444,,,41 last
 ALC,,528,,,
 CLE,,584,,,
 ELY,,609,,,
@@ -29,4 +29,4 @@ TOL,,691,,,
 WTI,,769,,,
 EKH,,823,,,
 SOB,,841,,,
-CHI,29 last,925,,,30 first
+CHI,40 last,925,,,41 first
