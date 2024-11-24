@@ -1,8 +1,7 @@
 title = "Keystone Monday-Thursday Eastbound Timetable"
 heading = "Keystone Service & Pennsylvanian: Monday-Thursday Eastbound"
 aria_label = "Keystone Monday-Thursday Eastbound"
-top_text = "NOTE: Keystone work during fall 2024. Please see <b><a href=\"https://www.amtrak.com/service-alerts-and-notices\">https://www.amtrak.com/service-alerts-and-notices</a></b> for the latest schedule adjustments."
-reference_date = "20241001"
+reference_date = "20250102"
 landscape = true
 key_baggage = true
 key_d = true

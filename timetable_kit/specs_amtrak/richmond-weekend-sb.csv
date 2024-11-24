@@ -1,5 +1,5 @@
 ,mile,access,station,65,89,79 saturday,153,195,41,157,99,87,97
-column-options,,,,ardp,,,,ardp,,,,,
+column-options,,,,days,,,,ardp,,,,,
 route-name,,,,,,,,,,,,,
 days,,,,BOS,RVR,RVR,RVR,RVR,RVR,RVR,RVR,RVR,RVR
 BOS,0,,,first,blank,blank,blank,first,blank,blank,first,first,blank
