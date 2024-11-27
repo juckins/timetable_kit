@@ -1,7 +1,7 @@
-,97-64 noheader,mile,access,stations,98-63 noheader
+,97-64,mile,access,stations,98-63
 column-options,ardp,,,,ardp reverse
-route-name,,,,,
-,"<div style=""text-align: center;"">(Via Rail <b>#97</b>)</div>",,,,"<div style=""text-align: center;"">(Via Rail <b>#98</b>)</div>"
+,"<div style=""text-align: center;""><b>Maple<br>Leaf</b></div>",,,,"<div style=""text-align: center;""><b>Maple<br>Leaf</b></div>"
+,"<div style=""text-align: center;"">Amtrak <b>#64</b><br>Via Rail <b>#97</b></div>",,,,"<div style=""text-align: center;"">Amtrak <b>#63</b><br>Via Rail <b>#98</b></div>"
 days,NYP,,,,NYP
 updown,,,,,
 TWO,97-64 first,0,,,98-63 last
