@@ -1,21 +1,21 @@
-,mile,access,station,67,89,79 monday,141,95,41,125,93,85,97
-column-options,,,,days,,,,ardp,,,,,
+,mile,access,station,67,89 monday,79 monday,141,41,95,125,93,85,97
+column-options,,,,days,,,,,,,,,
 route-name,,,,,,,,,,,,,
 days,,,,BOS,RVR,RVR,RVR,RVR,RVR,RVR,RVR,RVR,RVR
-BOS,0,,,first,blank,blank,blank,first,blank,blank,first,first,blank
-BBY,1,,,,blank,blank,blank,,blank,blank,,,blank
-RTE,11,,,,blank,blank,blank,,blank,blank,,,blank
-PVD,43,,,,blank,blank,from,,blank,blank,,,blank
-KIN,70,,,,blank,blank,Springfield,,blank,blank,,,blank
-WLY,87,,,,blank,blank,MA,,blank,blank,,,blank
-MYS,96,,,,blank,blank,(see,,blank,blank,,,blank
-NLC,105,,,,blank,blank,Hartford<br>Line,,blank,blank,,,blank
-OSB,123,,,,blank,blank,timetable),,blank,blank,,,blank
-NHV,156,,,,blank,blank,,,blank,blank,,,blank
-BRP,173,,,,blank,blank,,,blank,blank,,,blank
-STM,195,,,,blank,blank,,,blank,blank,,,blank
-NRO,212,,,,blank,blank,,,blank,blank,,,blank
-NYP,231<hr>0,,,,first two-row,first two-row,,,first two-row,first two-row,,,first two-row
+BOS,0,,,first,blank,blank,blank,blank,first,blank,first,first,blank
+BBY,1,,,,blank,blank,blank,blank,,blank,,,blank
+RTE,11,,,,blank,blank,blank,blank,,blank,,,blank
+PVD,43,,,,blank,blank,from,blank,,blank,,,blank
+KIN,70,,,,blank,blank,Springfield,blank,,blank,,,blank
+WLY,87,,,,blank,blank,MA,blank,,blank,,,blank
+MYS,96,,,,blank,blank,(see,blank,,blank,,,blank
+NLC,105,,,,blank,blank,Hartford<br>Line,blank,,blank,,,blank
+OSB,123,,,,blank,blank,timetable),blank,,blank,,,blank
+NHV,156,,,,blank,blank,,blank,,blank,,,blank
+BRP,173,,,,blank,blank,,blank,,blank,,,blank
+STM,195,,,,blank,blank,,blank,,blank,,,blank
+NRO,212,,,,blank,blank,,blank,,blank,,,blank
+NYP,231<hr>0,,,,first two-row,first two-row,,first two-row,,first two-row,,,first two-row
 NWK,10,,,,,,,,,,,,
 EWR,13,,,,,,,,,,,,
 MET,24,,,,,,,,,,,,
@@ -40,4 +40,4 @@ RVM,343,,,,,,,,,,,last,
 WBG,390,,,,,,,,,,,blank,
 NPN,413,,,last,,,,,,last,,blank,
 PTB,363,,,blank,,,,,,blank,,blank,
-NFK,448,,,blank,to Savannah,to Charlotte,last,last,to Miami,blank,last,blank,to Miami
+NFK,448,,,blank,to Savannah,to Charlotte,last,to Miami,last,blank,last,blank,to Miami
