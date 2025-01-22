@@ -54,6 +54,31 @@ def get_zonediff(local_zone, base_zone, reference_date):
         raise ValueError(
             "Can't handle timezone diffs which are not multiples of an hour"
         )
+
+    # Patch for Arizona time weirdness
+    # Without this override, the base code will show wrong times for Arizona during 
+    # standard time.  Correct times are shown during daylight time.
+    # N.Nerode provided the initial bug fix, C.Juckins tested and modified it.
+    # It is unclear why the return value is the same for each case, but it works.
+    # NOTE: This will need to be re-tested using an Amtrak GTFS file published in DST.
+    if local_zone == "America/Phoenix" and base_zone == "America/New_York":
+        #debug_print(1, "local_zone: ", local_zone, "and base_zone: ", base_zone)
+        debug_print(1, "NOTE: Using hard-coded patch for Arizona times...update after 20260308")
+        # Hardcode this for 2025 since we haven't figured out how to fix it correctly
+        year = reference_date[0:4]
+        #debug_print(1, "year: ", year)
+        if year == "2025":
+            #debug_print(1, "year: ", year)
+            if reference_date < "20250309":
+                # On 21 Jan 2025, results were good using reference date of 20250121 (std time)
+                return -3
+            elif reference_date < "20251102":
+                # On 21 Jan 2025, results were good using reference date of 20250430 (dst)
+                return -3
+            elif reference_date < "20260308":
+                # On 21 Jan 2025, results were good using reference date of 20251201 (std time)
+                return -3
+
     return diff_hours
 
 
