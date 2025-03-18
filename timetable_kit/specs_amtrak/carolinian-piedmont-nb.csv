@@ -1,4 +1,4 @@
-, station,mile, access,20 monday,20 saturday,80 monday,80 sunday,72,74,76,78
+, station,mile, access,20 saturday,20 tuesday,80 monday,80 sunday,72,74,76,78
 column-options,,,,ardp,,,,,,,ardp
 route-name,,,,,,,,,,,
 days,,,,CLT,CLT,CLT,CLT,CLT,CLT,CLT,CLT
@@ -15,9 +15,9 @@ CYN,,165,,,,,,,,,
 RGH,,173,,,,,,last two-row,last two-row,last two-row,last two-row
 SSM,,202,,,,,,blank,blank,blank,blank
 WLN,,228,,,,,,blank,blank,blank,blank
-RMT,,244,,"<div style=""text-align: center;"">via<br>Lynchburg</div>",,,,blank,blank,blank,blank
+RMT,,244,,,,,,blank,blank,blank,blank
 PTB,,342,,,,,,blank,blank,"<div style=""text-align: center;"">For</div>",blank
-RVR,,370,,"<div style=""text-align: center;"">see <b>Crescent</b><br>timetable</div>",,,,blank,blank,"<div style=""text-align: center;""><b>additional<br>service</b></div>",blank
+RVR,,370,,,,,,blank,blank,"<div style=""text-align: center;""><b>additional<br>service</b></div>",blank
 FBG,,425,,,,,,blank,blank,"<div style=""text-align: center;"">to Wilson,<br>Selma-Smithfield,</div>",blank
 QAN,,445,,,,,,blank,blank,"<div style=""text-align: center;"">and all</div>",blank
 ALX,,471,,,,,,blank,blank,"<div style=""text-align: center;"">points north</div>",blank

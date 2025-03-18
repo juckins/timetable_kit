@@ -1,4 +1,4 @@
-,station,mile,access,71,73,75,77,79 sunday,79 monday,19
+,station,mile,access,71,73,75,77,79 sunday,79 monday,19 wednesday
 column-options,,,,ardp,,,,,,ardp
 route-name,,,,,,,,,,
 days,,,,CLT,CLT,CLT,CLT,CLT,CLT,NYP
@@ -13,9 +13,9 @@ WAS,,226,,blank,blank,"<div style=""text-align: center;"">to Cary,<br>Raleigh,</
 ALX,,234,,blank,blank,"<div style=""text-align: center;"">and all</div>",blank,,,
 QAN,,260,,blank,blank,"<div style=""text-align: center;"">points north</div>",blank,,,
 FBG,,280,,blank,blank,"<div style=""text-align: center;"">see</div>",blank,,,
-RVR,,335,,blank,blank,"<div style=""text-align: center;""><b>Silver Service</b><br>timetable</div>",blank,,,"<div style=""text-align: center;"">via<br>Lynchburg</div>"
-PTB,,363,,blank,blank,"<div style=""text-align: center;""><b>(Silver Star)</b></div>",blank,,,
-RMT,,461,,blank,blank,blank,blank,,,"<div style=""text-align: center;"">see <b>Crescent</b><br>timetable</div>"
+RVR,,335,,blank,blank,"<div style=""text-align: center;""><b>Silver Service</b><br>timetable</div>",blank,,,
+PTB,,363,,blank,blank,"<div style=""text-align: center;""><b>(Floridian)</b></div>",blank,,,
+RMT,,461,,blank,blank,blank,blank,,,
 WLN,,477,,blank,blank,blank,blank,,,
 SSM,,503,,blank,blank,blank,blank,,,
 RGH,,532,,first two-row,first two-row,first two-row,first two-row,,,
@@ -26,5 +26,5 @@ GRO,,613,,,,,,,,
 HPT,,629,,,,,,,,
 SAL,,663,,,,,,,,
 KAN,,679,,,,,,,,
-CLT,,705,,last,last,last,last,last,last,
+CLT,,705,,last,last,last,last,last,last,last
 destination,,,,,,,,,,
