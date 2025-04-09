@@ -1,7 +1,7 @@
 title = "Keystone Weekend Eastbound Timetable"
 heading = "Keystone Service & Pennsylvanian: Weekend Eastbound"
 aria_label = "Keystone Weekend Eastbound"
-reference_date = "20250102"
+reference_date = "20250406"
 landscape = true
 key_baggage = true
 key_d = true
