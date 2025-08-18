@@ -1,5 +1,6 @@
 title = "Vermonter Timetable"
 heading = "Vermonter"
 aria_label = "Vermonter"
-reference_date = "20241202"
+top_text = "Note that Train 54 on Saturdays and Sundays has the same schedule, but an extra column appears due to duplicate calendar data."
+reference_date = "20250720"
 for_rpa = true
