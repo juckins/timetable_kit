@@ -1,0 +1,13 @@
+title = "Amtrak's Acela: Weekday Northbound"
+heading = "Acela: Weekday Northbound"
+aria_label = "Acela Weekday Northbound"
+reference_date = "20250818"
+# This timetable gets split programmatically
+max_columns_per_page = 9
+landscape = true
+key_on_right = true
+key_baggage = true
+key_d = true
+key_r = true
+for_rpa = true
+
