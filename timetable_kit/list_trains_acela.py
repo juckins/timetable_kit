@@ -9,6 +9,9 @@ which stop at STATION. Acela train numbers are 4 digits long and begin with a "2
 station B. Acela train numbers are 4 digits long and begin with a "2".
 
 Sort by departure time. Filter by reference date. Optionally filter by day of week.
+
+Note this script was created by Christopher Juckins using a slightly modified version 
+of 'list_trains.py'.
 """
 
 import argparse
