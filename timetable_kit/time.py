@@ -60,7 +60,7 @@ def get_zonediff(local_zone, base_zone, reference_date):
     # standard time.  Correct times are shown during daylight time.
     # N.Nerode provided the initial bug fix, C.Juckins tested and modified it.
     # It is unclear why the return value is the same for each case, but it works.
-    # NOTE: This will need to be re-tested using an Amtrak GTFS file published in DST.
+    # NOTE: This change does appear to work with an Amtrak GTFS file published during DST.
     if local_zone == "America/Phoenix" and base_zone == "America/New_York":
         #debug_print(1, "local_zone: ", local_zone, "and base_zone: ", base_zone)
         debug_print(1, "NOTE: Using hard-coded patch for Arizona times...update after 20260308")
