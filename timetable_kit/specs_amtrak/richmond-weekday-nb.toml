@@ -3,6 +3,7 @@ heading = "Richmond & Hampton Roads - Weekday Northbound"
 amtrak_css_class = "amtrak-to-css"
 aria_label = "Richmond Weekday Northbound"
 reference_date = "20250108"
+max_columns_per_page = 8
 bottom_text = "Carolinian #80 allows pickups at some additional stops on the NEC on Thursday, Friday, and Sunday."
 key_baggage = true
 key_d = true

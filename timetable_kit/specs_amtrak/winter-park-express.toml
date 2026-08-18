@@ -1,7 +1,7 @@
 title = "Winter Park Express Timetable"
 heading = "Winter Park Express"
 aria_label = "Winter Park Express"
-reference_date = "20241220"
+reference_date = "20251219"
 for_rpa = true
-top_text = "The Winter Park Express ski train will run Fridays, Saturdays and Sundays during these weekends:<br>December 20-22 and December 27-29, 2024<br>January 3-5, 2025<br><br>Expanded Service running on Thursdays, Fridays, Saturdays, Sundays and Mondays will occur from January 9 - March 31, 2025."
-programmers_warning = "Had to run with reference_date of 20250109 to get the January-March schedule"
+top_text = "The Winter Park Express ski train will run Fridays, Saturdays and Sundays from December 19 through January 4. Expanded service will run Thursdays, Fridays, Saturdays and Sundays from January 8 through March 29, 2026."
+programmers_warning = ""
