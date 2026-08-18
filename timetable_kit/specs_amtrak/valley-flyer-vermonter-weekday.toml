@@ -1,0 +1,8 @@
+title = "Valley Flyer & Vermonter Weekday Timetable"
+heading = "Valley Flyer & Vermonter: Weekday"
+aria_label = "Valley Flyer & Vermonter Weekday"
+reference_date = "20260825"
+key_baggage = true
+key_d = true
+key_r = true
+for_rpa = true
