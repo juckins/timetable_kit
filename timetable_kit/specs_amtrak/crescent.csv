@@ -1,7 +1,7 @@
-,19 wednesday,mile, access, station,timezone,20 wednesday,20 saturday
-column-options,days ardp,,,,,days ardp reverse,days reverse
+,19,mile, access, station,timezone,20 sunday,20 friday
+column-options,days ardp,,,,,days ardp reverse,days ardp reverse
 updown,,,,,,,
-NYP,,0,,,,20 wednesday last,20 saturday last
+NYP,,0,,,,,
 NWK,,10,,,,,
 MET,,24,,,,,
 omit,NBK used to have service,32,,,,,

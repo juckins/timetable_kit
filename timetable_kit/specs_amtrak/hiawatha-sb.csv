@@ -1,10 +1,10 @@
-,stations,mile,access,330,332,334,336,338,1340,342
-column-options,,,,ardp,,,,,ardp,
-route-name,,,,,,,,,,
-days,,,,MKE,MKE,MKE,MKE,MKE,MKE,MKE
-,,,,,,,,,"<div style=""text-align: center"">From Minnesota</div>",
-MKE,,0,,,,,,,,
-MKA,,8,,,,,,,,
-SVT,,23,,,,,,,,
-GLN,,68,,,,,,,,
-CHI,,86,,,,,,,,
+,stations,mile,access,330 wednesday,330 saturday,332 wednesday,332 saturday,334 wednesday,334 saturday,336 wednesday,336 saturday,338 wednesday,1340 wednesday,342 wednesday
+column-options,,,,ardp,,,,,,,,,,
+route-name,,,,,,,,,,,,,,
+days,,,,MKE,MKE,MKE,MKE,MKE,MKE,MKE,MKE,MKE,MKE,MKE
+origin,,,,,,,,,,,,,,
+MKE,,0,,,,,,,,,,,,
+MKA,,8,,,,,,,,,,,,
+SVT,,23,,,,,,,,,,,,
+GLN,,68,,,,,,,,,,,,
+CHI,,86,,,,,,,,,,,,

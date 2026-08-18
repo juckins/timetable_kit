@@ -1,10 +1,10 @@
-,stations,mile,access,329,331,1333,335,337,339,341,343
-column-options,,,,ardp,,ardp,,,,,days short-days-box
-route-name,,,,,,,,,,,
-days,,,,CHI,CHI,CHI,CHI,CHI,CHI,CHI,CHI
-CHI,,0,,,,,,,,,
-GLN,,18,,,,,,,,,
-SVT,,63,,,,,,,,,
-MKA,,78,,,,,,,,,
-MKE,,86,,,,,,,,,
-,,,,,,"<div style=""text-align: center"">To Minnesota</div>",,,,,
+,stations,mile,access,329 wednesday,331 wednesday,331 saturday,1333 wednesday,335 wednesday,335 saturday,337 wednesday,339 wednesday,341 wednesday,343
+column-options,,,,ardp,,,,,,,,,days short-days-box
+route-name,,,,,,,,,,,,,
+days,,,,CHI,CHI,CHI,CHI,CHI,CHI,CHI,CHI,CHI,CHI
+CHI,,0,,,,,,,,,,,
+GLN,,18,,,,,,,,,,,
+SVT,,63,,,,,,,,,,,
+MKA,,78,,,,,,,,,,,
+MKE,,86,,,,,,,,,,,
+destination,,,,,,,,,,,,,
