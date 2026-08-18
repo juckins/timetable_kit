@@ -3,9 +3,9 @@ heading = "Acela: Sunday Southbound"
 aria_label = "Acela Sunday Southbound"
 reference_date = "20250824"
 # This timetable gets split programmatically
-max_columns_per_page = 9
-landscape = true
-key_on_right = true
+max_columns_per_page = 10
+landscape = false
+key_on_right = false
 key_baggage = true
 key_d = true
 key_r = true
