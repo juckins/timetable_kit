@@ -1,0 +1,10 @@
+,23,25,mile, access, station,24,26
+column-options,ardp,,,,,ardp reverse,reverse
+days,MOE,MOE,,,,NOL,NOL
+updown,,,,,,,
+MOE,first,first,0,,,last,last
+PAG,,,40,,,,
+BIX,,,61,,,,
+GUF,,,73,,,,
+BAS,,,88,,,,
+NOL,last,last,145,,,first,first
