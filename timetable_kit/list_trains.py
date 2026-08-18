@@ -8,6 +8,9 @@ which stop at STATION.
 ./list_trains STATION_A STATION_B: Find all the trains (& buses, etc.) from station A to
 station B (by all routes).
 
+Use the optional --acela flag to filter results specifically for Acela services
+(4-digit train numbers starting with '2').
+
 Sort by departure time. Filter by reference date. Optionally filter by day of week.
 """
 
@@ -26,14 +29,13 @@ from timetable_kit.time import modulo24
 
 # Common arguments for the command line
 from timetable_kit.timetable_argparse import (
+    add_agency_argument,
     add_date_argument,
     add_day_argument,
     add_debug_argument,
-    add_agency_argument,
     add_gtfs_argument,
 )
-from timetable_kit.tsn import make_trip_id_to_tsn_dict
-from timetable_kit.tsn import stations_list_from_tsn
+from timetable_kit.tsn import make_trip_id_to_tsn_dict, stations_list_from_tsn
 
 
 def get_trips_at(stop_id: str, *, feed: FeedEnhanced) -> list[str]:
@@ -209,6 +211,11 @@ def make_argparser():
         help="""Display first and last stations for each trip""",
         action="store_true",
     )
+    parser.add_argument(
+        "--acela",
+        help="""Filter results to display only Acela trains (4-digit train numbers starting with '2')""",
+        action="store_true",
+    )
     return parser
 
 
@@ -287,12 +294,26 @@ if __name__ == "__main__":
     else:
         sorted_trip_ids = trip_ids
 
-    # Convert to tsns.  Note that duplicate TSNs can appear here (with different trip_ids),
-    # And we definitely want the user to know about this, so leave those duplicates.
-    sorted_tsns = [trip_id_to_tsn[trip_id] for trip_id in sorted_trip_ids]
+    # Convert to tsns and report results based on mode
+    if args.acela:
+        # Filter for 4-digit train numbers starting with '2' (Acela)
+        sorted_tsns = [
+            trip_id_to_tsn[trip_id]
+            for trip_id in sorted_trip_ids
+            if trip_id_to_tsn[trip_id].isdigit()
+            and len(trip_id_to_tsn[trip_id]) == 4
+            and trip_id_to_tsn[trip_id].startswith("2")
+        ]
 
-    # Report the results!
-    print("Trains found:", sorted_tsns)
+        unique_sorted_tsns = list(dict.fromkeys(sorted_tsns))
+        unique_numerical_sorted_tsns = sorted(unique_sorted_tsns, key=int)
+
+        print("Trains found:     ", unique_sorted_tsns)
+        print("Trains found sort:", unique_numerical_sorted_tsns)
+    else:
+        # Standard list_trains behavior
+        sorted_tsns = [trip_id_to_tsn[trip_id] for trip_id in sorted_trip_ids]
+        print("Trains found:", sorted_tsns)
 
     if args.extent:
         # We want to print first and last stops for each.
