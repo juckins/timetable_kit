@@ -1,7 +1,7 @@
 title = "Floridian Timetable"
 heading = "Floridian"
 aria_label = "Floridian"
-reference_date = "20241110"
+reference_date = "20260901"
 key_baggage = true
 key_tz = true
 for_rpa = true
