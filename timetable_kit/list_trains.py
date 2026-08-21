@@ -308,8 +308,9 @@ if __name__ == "__main__":
         unique_sorted_tsns = list(dict.fromkeys(sorted_tsns))
         unique_numerical_sorted_tsns = sorted(unique_sorted_tsns, key=int)
 
-        print("Trains found:     ", unique_sorted_tsns)
-        print("Trains found sort:", unique_numerical_sorted_tsns)
+        print("Trains found:", unique_sorted_tsns)
+        # The following print statement was used during troubleshooting
+        #print("Trains found numerical order:", unique_numerical_sorted_tsns)
     else:
         # Standard list_trains behavior
         sorted_tsns = [trip_id_to_tsn[trip_id] for trip_id in sorted_trip_ids]
