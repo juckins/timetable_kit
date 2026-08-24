@@ -1,4 +1,15 @@
 #!/usr/bin/env python3
+
+"""
+TODO:
+For the .list trains, suggest running all the index numbers first with the -r -f -a 
+so the spec files are updated individually, getting the correct date.  Then go back
+and run one index for that .list train with the -r -a flags (test this).
+"""
+
+
+
+
 """
 validate_create_timetables.py
 
@@ -39,6 +50,7 @@ Usage Examples:
     # Run generation with opt-in auto-recovery for "No trip found" errors:
     ./validate_create_timetables.py -c Crescent -r -a
     ./validate_create_timetables.py -c 15 -r -a
+    ./validate_create_timetables.py -c 29 -w 2 -r -a (2 weeks out)
 
     # Force individual timetable creation using each .csv file (for trains with 
     # a .list file) to help with debugging/troubleshooting:
@@ -48,6 +60,10 @@ Usage Examples:
     ./validate_create_timetables.py -c 0-5 -r --output-dir ./out --author "Your Name <url>"
 
 Change Log:
+2026-08-23  C Juckins  Appended ref_weekday to train numbers in CSV cut & paste output.
+2026-08-23  C Juckins  Updated output order and labeling for train printouts.
+2026-08-23  C Juckins  Preserved train output sequence from list_trains.py (removed numerical sorting)
+                       and added explicit CSV cut & paste output line without single quotes.
 2026-08-21  C Juckins  Added green banner output when GTFS data is current and valid.
 2026-08-21  C Juckins  Added prominent red warning if GTFS file is older than 36 hours (or missing).
 2026-08-21  C Juckins  Added explicit status tracking in summary for auto-recovered timetables.
@@ -57,8 +73,6 @@ Change Log:
 2026-08-21  C Juckins  Added exit code tracking for timetable creation errors.
 2026-08-21  C Juckins  Added auto-recovery to try additional dates if the "No trip found" 
                        error occurs on a certain day.
-
-
 """
 
 import argparse
@@ -370,7 +384,7 @@ CHECKS = [
         "day": "weekend",
         "sort": ["PHL", "PHL", "HAR"],
         "csv": SPECS_DIR / "keystone-service-weekend-wb.csv",
-        "ref_weekday": "tuesday",
+        "ref_weekday": "saturday",
         "spec": "keystone-service.list",
     },
     {
@@ -378,7 +392,7 @@ CHECKS = [
         "day": "weekend",
         "sort": ["PHL", "HAR", "PHL"],
         "csv": SPECS_DIR / "keystone-service-weekend-eb.csv",
-        "ref_weekday": "tuesday",
+        "ref_weekday": "saturday",
         "spec": "keystone-service.list",
     },
 
@@ -839,14 +853,17 @@ def create_timetable(spec: str, output_dir: Path, author: str, auto_recover: boo
         return "FAILED", e.returncode, None
 
 
-def extract_train_numbers(text: str, ignore_2000s: bool = False) -> set[str]:
-    trains = set(re.findall(r"\d+", text))
+def extract_train_numbers(text: str, ignore_2000s: bool = False) -> list[str]:
+    """Extract train numbers while maintaining original sequence order."""
+    trains = re.findall(r"\d+", text)
     if ignore_2000s:
-        trains = {t for t in trains if not re.match(r"^2\d{3}$", t)}
-    return trains
+        trains = [t for t in trains if not re.match(r"^2\d{3}$", t)]
+    # Preserve order while removing duplicate sequence occurrences
+    return list(dict.fromkeys(trains))
 
 
-def get_csv_first_line_trains(csv_path: Path, ignore_2000s: bool = False) -> set[str]:
+def get_csv_first_line_trains(csv_path: Path, ignore_2000s: bool = False) -> list[str]:
+    """Extract train numbers from CSV first line while maintaining sequence order."""
     if not csv_path.exists():
         sys.exit(f"ERROR: CSV file not found: {csv_path}")
 
@@ -859,7 +876,8 @@ def get_csv_first_line_trains(csv_path: Path, ignore_2000s: bool = False) -> set
 def run_check(idx: int, check: dict, today: date, weeks_out: int = 2) -> bool:
     script_cmd = check.get("script", "./list_trains.py")
     day = check.get("day")
-    ref_date = next_future_weekday(today, check["ref_weekday"], weeks_out)
+    ref_weekday = check["ref_weekday"].lower()
+    ref_date = next_future_weekday(today, ref_weekday, weeks_out)
     ref_date_str = ref_date.strftime("%Y%m%d")
     ignore_trains = set(str(t) for t in check.get("ignore_trains", []))
     allowed_csv_trains = set(str(t) for t in check.get("allowed_csv_trains", []))
@@ -882,14 +900,22 @@ def run_check(idx: int, check: dict, today: date, weeks_out: int = 2) -> bool:
         print("Ignoring 4-digit 2000-series train numbers (2000-2999)")
 
     raw_output = run_list_trains(script_cmd, ref_date_str, day, check["sort"])
-    live_trains = extract_train_numbers(raw_output, ignore_2000s=ignore_2000s) - ignore_trains
-    csv_trains = get_csv_first_line_trains(check["csv"], ignore_2000s=ignore_2000s) - ignore_trains
+    
+    # Filter ignored trains while preserving sequence output order
+    live_trains = [t for t in extract_train_numbers(raw_output, ignore_2000s=ignore_2000s) if t not in ignore_trains]
+    csv_trains = [t for t in get_csv_first_line_trains(check["csv"], ignore_2000s=ignore_2000s) if t not in ignore_trains]
 
-    print(f"Trains from {script_cmd}: {sorted(live_trains, key=int)}")
-    print(f"Trains from CSV first line: {sorted(csv_trains, key=int)}")
+    cut_paste_trains = [f"{t} {ref_weekday}" for t in live_trains]
 
-    added = live_trains - csv_trains
-    removed = (csv_trains - live_trains) - allowed_csv_trains
+    print(f"Trains from {script_cmd}: {live_trains}")
+    print(f"Trains from CSV first line: {csv_trains}")
+    print(f"Trains for CSV cut & paste: [{','.join(cut_paste_trains)}]")
+
+    live_set = set(live_trains)
+    csv_set = set(csv_trains)
+
+    added = live_set - csv_set
+    removed = (csv_set - live_set) - allowed_csv_trains
 
     if not added and not removed:
         print("MATCH: Train numbers are identical.")
