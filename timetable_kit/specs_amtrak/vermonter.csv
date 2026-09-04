@@ -1,5 +1,5 @@
-,55,57,mile, access, station,54,56
-column-options,ardp,,,,,reverse ardp,reverse
+,55 tuesday,57 saturday,mile, access, station,56 tuesday,54 saturday
+column-options,ardp,,,,,reverse,
 days,SAB,SAB,,,,WAS,WAS
 updown,,,,,,,
 SAB,,,0,,,,

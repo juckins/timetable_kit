@@ -1,4 +1,4 @@
-,425,55,479,mile,access,station,56,486,494
+,425 / 125 noheader,55,479,mile,access,station,56,486,494
 column-options,ardp,,,,,,reverse ardp,reverse,reverse
 route-name,,,,,,,,,
 days,GFD,GFD,GFD,,,,SPG,SPG,SPG
@@ -7,13 +7,18 @@ updown,,,,,,,,,
 GFD,,,,0,,,,,
 NHT,,,,19,,,,,
 HLK,,,,30,,,,,
-SPG,,,,40,,,,,
-WNL,,,,55,,,,,
-WND,,,,60,,,,,
-HFD,,,,66,,,,,
-BER,,,,77,,,,,
-MDN,,,,84,,,,,
-WFD,,,,90,,,,,
-STS,,,,100,,,,,
-NHV,,,,102,,,,,
-,,to<br>Washington,,,,,from<br>Washington,,
+SPG,425 last,55 last,479 last,40,,,56 first,486 first,494 first
+blank,"<div style=""text-align:center;""><b>Connecting</b></div>",downarrow,downarrow,blank,blank,blank,uparrow,uparrow,uparrow
+blank,"<div style=""text-align:center;""><b>Train</b></div>",downarrow,downarrow,blank,blank,blank,uparrow,uparrow,uparrow
+blank,"<div style=""text-align:center;""><b>125</b></div>",downarrow,downarrow,blank,blank,blank,uparrow,uparrow,uparrow
+blank,downarrow,downarrow,downarrow,blank,blank,blank,uparrow,uparrow,uparrow
+SPG,125 first,55 first,479 first,40,,,56 last,486 last,494 last
+WNL,125,,,55,,,,,
+WND,125,,,60,,,,,
+HFD,125,,,66,,,,,
+BER,125,,,77,,,,,
+MDN,125,,,84,,,,,
+WFD,125,,,90,,,,,
+STS,125,,,100,,,,,
+NHV,125,,,102,,,,,
+,Train 125<br>to<br>Washington,to<br>Washington,,,,,from<br>Washington,,

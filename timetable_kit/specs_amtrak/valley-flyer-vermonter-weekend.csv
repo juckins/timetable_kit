@@ -1,9 +1,9 @@
-,461,57,499,mile,access,station,54,400,488
+,461,57,499,mile,access,station,400,54,488
 column-options,ardp,,,,,,reverse ardp,reverse,reverse
 route-name,,,,,,,,,
 days,GFD,GFD,GFD,,,,SPG,SPG,SPG
 updown,,,,,,,,,
-,,from<br>St. Albans,,,,,to<br>St. Albans,,
+,,from<br>St. Albans,,,,,,to<br>St. Albans,
 GFD,,,,0,,,,,
 NHT,,,,19,,,,,
 HLK,,,,30,,,,,
@@ -16,4 +16,4 @@ MDN,,,,84,,,,,
 WFD,,,,90,,,,,
 STS,,,,100,,,,,
 NHV,,,,102,,,,,
-,,to<br>Washington,,,,,from<br>Washington,,
+,,to<br>Washington,,,,,,from<br>Washington,
