@@ -73,6 +73,8 @@ Change Log:
 2026-08-21  C Juckins  Added exit code tracking for timetable creation errors.
 2026-08-21  C Juckins  Added auto-recovery to try additional dates if the "No trip found" 
                        error occurs on a certain day.
+2026-09-04  C Juckins  Lake Shore Limited needs to ignore trains 50, 51.
+                       Valley Flyer ignores train 125 as it's a special case. 
 """
 
 import argparse
@@ -402,7 +404,7 @@ CHECKS = [
         "sort": ["CHI", "CHI", "NYP", "NYP", "CHI", "CHI", "BOS", "BOS", "CHI"],
         "csv": SPECS_DIR / "lake-shore-limited.csv",
         "ref_weekday": "tuesday",
-        "ignore_trains": ['50'],
+        "ignore_trains": ['50',  '51'],
     },
 
     {
@@ -553,6 +555,8 @@ CHECKS = [
         "sort": ["GFD", "GFD", "SPG", "SPG", "GFD", "GFD", "NHV", "NHV", "GFD"],
         "csv": SPECS_DIR / "valley-flyer-vermonter-weekday.csv",
         "ref_weekday": "tuesday",
+        # 125 is added in the spec file for cross-platform connection
+        "ignore_trains": ['125'],
         "spec": "valley-flyer-vermonter.list",
     },
     {
