@@ -1,7 +1,7 @@
 title = "Amtrak's Acela: Weekday Southbound"
 heading = "Acela: Weekday Southbound"
 aria_label = "Acela Weekday Southbound"
-reference_date = "20260901"
+reference_date = "20260915"
 # This timetable gets split programmatically
 max_columns_per_page = 10
 landscape = false

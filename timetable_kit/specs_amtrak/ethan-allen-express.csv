@@ -1,19 +1,19 @@
-,290 wednesday,290 saturday,mile, access, station,291
-column-options,ardp,,,,,reverse ardp
-days,BTN,BTN,,,,NYP
-updown,,,,,,
-BTN,,,0,,,
-VRN,,,21,,,
-MBY,,,34,,,
-RUD,,,67,,,
-CNV,,,76,,,
-FED,,,111,,,
-SAR,,,130,,,
-SDY,,,149,,,
-ALB,,,167,,,
-HUD,,,194,,,
-RHI,,,220,,,
-POU,,,235,,,
-CRT,,,276,,,
-YNY,,,294,,,
-NYP,,,308,,,
+,290 wednesday,mile, access, station,291
+column-options,ardp,,,,reverse ardp
+days,BTN,,,,NYP
+updown,,,,,
+BTN,,0,,,
+VRN,,21,,,
+MBY,,34,,,
+RUD,,67,,,
+CNV,,76,,,
+FED,,111,,,
+SAR,,130,,,
+SDY,,149,,,
+ALB,,167,,,
+HUD,,194,,,
+RHI,,220,,,
+POU,,235,,,
+CRT,,276,,,
+YNY,,294,,,
+NYP,,308,,,

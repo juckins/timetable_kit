@@ -1,7 +1,7 @@
 title = "Adirondack Timetable"
 heading = "Adirondack"
 aria_label = "Adirondack"
-reference_date = "20260901"
+reference_date = "20260915"
 key_d = true
 key_r = true
 for_rpa = true
