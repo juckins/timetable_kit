@@ -21,36 +21,65 @@ Even if some routes do not have their train numbers changing, this script
 will update the corresponding .toml file for the latest working 
 reference date.
 
-Via command-line argument (-r / --run-create), it can also create timetables
-for checks that pass validation. The output directory, author, and executable
-can be configured as global settings or overridden via CLI flags.
+When you run the commands below, you will get a printout of the valid train
+numbers, often with the day of the week, that you can put into the appropriate
+.csv file using a text editor.  You can then open the .csv file using a 
+spreadsheet editor like Open Office "ocalc" to modify columns and rows as 
+needed. 
+
+For example, here is sample output showing the train numbers that should
+appear in a spec file:
+
+
+=== [3] Acela - Saturday Northbound ===
+Reference date: 20261003 (Saturday)
+Day filter: saturday
+CSV: /home/juckins/ttkit/timetable_kit/timetable_kit/specs_amtrak/acela-saturday-nb.csv
+TOML up to date: acela-saturday-nb.toml (reference_date = "20261003")
+Full list_trains command: ./list_trains.py --acela --reference-date 20261003 --day saturday --sort NYP WAS NYP NYP BOS
+Trains from ./list_trains.py --acela: ['2250', '2252', '2254', '2208', '2256', '2258', '2260', '2262', '2224', '2226']
+Trains from CSV first line: ['2250', '2252', '2254', '2208', '2256', '2258', '2260', '2262', '2224', '2226']
+Trains for CSV cut & paste: [2250 saturday,2252 saturday,2254 saturday,2208 saturday,2256 saturday,2258 saturday,2260 saturday,2262 saturday,2224 saturday,2226 saturday]
+MATCH: Train numbers are identical.
+
+
+Using the command-line argument (-r / --run-create), this script will also 
+create timetables after checking the spec files for validation of train numbers 
+and dates.  The output directory, author, and other settings can be configured 
+globally or overridden via CLI flags.
 
 Usage Examples:
     # List detailed help and running instructions:
     ./validate_create_timetables.py -h
 
-    # List all available checks:
+    # List all available spec file checks:
     ./validate_create_timetables.py -l
 
-    # Run all checks 2 weeks out (default):
+    # Run all spec file checks for a date 2 weeks out (the default):
     ./validate_create_timetables.py
 
-    # Show only MISMATCH entries in the summary report:
+    # Run all spec file checks, but after the script runs, show only the MISMATCH
+    # entries in the summary report.  This means you need to edit the appropriate spec file:
     ./validate_create_timetables.py -m
 
-    # Validate specific checks and in the screen output print a list 
-    # of the passing/valid .csv/.toml files:
+    # Run and check specific spec files (or groups of spec files) and in the final output 
+    # print a list of the passing/valid .csv/.toml files:
     ./validate_create_timetables.py -c Acela -p
     ./validate_create_timetables.py -c 0-5 -p
 
-    # Validate specific checks and generate timetables for passing/valid ones:
+    # Like the command above, but then generate the timetables for spec files 
+    # that pass their checks:
     ./validate_create_timetables.py -c Acela -r
     ./validate_create_timetables.py -c 0-5 -r
 
-    # Run generation with opt-in auto-recovery for "No trip found" errors:
+    # Run and check specific check files, generate the timetables, but also use the "-a" flag
+    # to try and get around the "No trip found" errors using "auto-recovery":
     ./validate_create_timetables.py -c Crescent -r -a
     ./validate_create_timetables.py -c 15 -r -a
-    ./validate_create_timetables.py -c 29 -w 2 -r -a (2 weeks out)
+
+    # Like the command above, but use the "-w 3" flag to look for dates 3 weeks out.
+    # This is for the Empire Service:
+    ./validate_create_timetables.py -c 17-20 -r -a -w 3
 
     # Force individual timetable creation using each .csv file (for trains with 
     # a .list file) to help with debugging/troubleshooting:
@@ -58,6 +87,11 @@ Usage Examples:
 
     # Run timetable generation using custom output directory or author credit:
     ./validate_create_timetables.py -c 0-5 -r --output-dir ./out --author "Your Name <url>"
+
+Finally, a warning will be printed if the GTFS data is too old and needs to be re-downloaded.
+I did not make this download automatically because sometimes you want to run the program using
+slightly older GTFS data to check for problems that Amtrak unfortunately introduces. 
+
 
 Change Log:
 2026-08-23  C Juckins  Appended ref_weekday to train numbers in CSV cut & paste output.
@@ -75,6 +109,7 @@ Change Log:
                        error occurs on a certain day.
 2026-09-04  C Juckins  Lake Shore Limited needs to ignore trains 50, 51.
                        Valley Flyer ignores train 125 as it's a special case. 
+2026-09-16  C Juckins  Update documentation and Usage Examples.
 """
 
 import argparse
@@ -471,6 +506,7 @@ CHECKS = [
     },
     {
         "name": "NEC Boston-Washington - Saturday Northbound",
+        # For Saturday NB Crescent, use '20 Saturday / PHL'
         "script": "./list_trains.py",
         "day": "saturday",
         "sort": ["PHL", "NYP", "BOS", "WAS", "NYP", "PHL", "NYP", "RNK", "PHL", "NPN", "PHL", "RNK", "PHL"],
@@ -1138,7 +1174,7 @@ def main():
         print("  All selected checks matched successfully (0 mismatches).")
 
     if args.print_ok_files:
-        print("\n=== Validated Spec Files (Ready to Upload) ===")
+        print("\n=== Validated Spec Files (Ready to Upload to GitHub) ===")
         if ok_filenames:
             for filename in sorted(ok_filenames):
                 print(filename)
