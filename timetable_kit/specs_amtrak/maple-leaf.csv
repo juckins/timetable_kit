@@ -1,0 +1,29 @@
+,64 tuesday / 7097 noheader,mile,access,stations,63 tuesday / 7098 noheader
+column-options,ardp,,,,ardp reverse
+route-name,,,,,
+,"<div style=""text-align: center;"">(Via Rail <b>#97</b>)</div>",,,,"<div style=""text-align: center;"">(Via Rail <b>#98</b>)</div>"
+days,NYP,,,,NYP
+updown,,,,,
+TWO,7097 first,0,,,7098 last
+OKL,7097,21,,,7098
+AST,7097,32,,,7098
+GMS,7097,56,,,7098
+SCA,7097,71,,,7098
+NFS,64 tuesday,82,,,63 tuesday
+CBN,64 tuesday,83,,,63 tuesday
+NFL,64 tuesday,84,,,63 tuesday
+BFX,64 tuesday,107,,,63 tuesday
+BUF,64 tuesday,113,,,63 tuesday
+ROC,64 tuesday,174,,,63 tuesday
+SYR,64 tuesday,253,,,63 tuesday
+ROM,64 tuesday,294,,,63 tuesday
+UCA,64 tuesday,307,,,63 tuesday
+AMS,64 tuesday,367,,,63 tuesday
+SDY,64 tuesday,385,,,63 tuesday
+ALB,64 tuesday,403,,,63 tuesday
+HUD,64 tuesday,430,,,63 tuesday
+RHI,64 tuesday,456,,,63 tuesday
+POU,64 tuesday,471,,,63 tuesday
+CRT,64 tuesday,512,,,63 tuesday
+YNY,64 tuesday,530,,,63 tuesday
+NYP,64 tuesday last,544,,,63 tuesday first

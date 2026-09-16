@@ -2,7 +2,7 @@ title = "Berkshire Flyer Timetable"
 heading = "Berkshire Flyer"
 aria_label = "Berkshire Flyer"
 top_text = "The Berkshire Flyer is a seasonal train service that will begin on Friday, June 12th and will operate on Fridays and Sundays through Sunday, September 19th. See more information at <b><a href=\"https://www.amtrak.com/berkshire-flyer-train\">www.amtrak.com/berkshire-flyer-train</a></b>."
-reference_date = "20260908"
+reference_date = "20260929"
 key_d = true
 key_r = true
 for_rpa = true

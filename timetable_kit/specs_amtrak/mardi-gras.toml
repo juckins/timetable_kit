@@ -2,7 +2,7 @@ title = "Mardi Gras Timetable"
 heading = "Mardi Gras Service"
 aria_label = "Mardi Gras Service"
 top_text = "The Mardi Gras is a new Amtrak service that begins August 18, 2025.<br><br>See more information at <b><a href=\"https://www.amtrak.com/routes/amtrak-mardi-gras-service.html\">www.amtrak.com/routes/amtrak-mardi-gras-service.html</a>."
-reference_date = "20260915"
+reference_date = "20260929"
 key_d = true
 key_r = true
 for_rpa = true
