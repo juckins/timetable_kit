@@ -1,25 +1,24 @@
-,stations,access,503,11 tuesday,7,5605,505,5677,507,519
-column-options,,,ardp,ardp,ardp,,,ardp,,
-route-name,,,,,,,,,,
-days,,,EUG,SEA,SEA,SEA,EUG,SEA,PDX,SEA
-VAC,,,blank,blank,blank,,blank,,blank,
-BEL,,,blank,blank,blank,5605 first,blank,5677 first,blank,
-MVW,,,blank,blank,blank,,blank,,blank,
-STW,,,blank,blank,From Chicago,5605 blank,blank,5677 blank,blank,
-EVR,,,blank,blank,7 first two_row,,blank,,blank,
-EDM,,,blank,blank,,5605 blank,blank,5677 blank,blank,
-SEA,,,first two_row,first two_row,7 last,5605 last,505 first two_row,5677 last,507 first two_row,519 last
-TUK,,,,,blank,blank,,blank,,blank
-TAC,,,,,blank,blank,,blank,,blank
-OLW,,,,,blank,blank,,blank,,blank
-CTL,,,,,blank,blank,,blank,,blank
-KEL,,,,,blank,blank,,blank,,blank
-VAN,,,,,blank,blank,,blank,,blank
-PDX,,,,,blank,blank,,blank,507 last,blank
-ORC,,,,,blank,blank,,blank,blank,blank
-SLM,,,,,blank,blank,,blank,blank,blank
-ALY,,,,,blank,blank,,blank,blank,blank
-EUG,,,503 last,,blank,blank,505 last,blank,blank,blank
-CMO,,,blank,,blank,blank,blank,blank,blank,blank
-KFS,,,blank,,blank,blank,blank,blank,blank,blank
-,,,blank,To Los Angeles,blank,blank,blank,blank,blank,blank
+,stations,timezone,access,503 tuesday,505 tuesday,11 tuesday,517 tuesday,507 tuesday,509 tuesday,511 tuesday,519 tuesday
+column-options,,,,,,,,,,ardp,ardp
+route-name,,,,,,,,,,,
+days,,,,SEA,SEA,SEA,SEA,SEA,SEA,SEA,SEA
+VAC,,,,,,,,,,,
+BEL,,,,,,,,,,,
+MVW,,,,,,,,,,,
+STW,,,,,,,,,,,
+EVR,,,,,,,,,,,
+EDM,,,,,,,,,,,
+SEA,,,,,,,,,,,
+TUK,,,,,,,,,,,
+TAC,,,,,,,,,,,
+OLW,,,,,,,,,,,
+CTL,,,,,,,,,,,
+KEL,,,,,,,,,,,
+VAN,,,,,,,,,,,
+PDX,,,,,,,,,,,
+ORC,,,,,,,,,,,
+SLM,,,,,,,,,,,
+ALY,,,,,,,,,,,
+EUG,,,,,,,,,,,
+CMO,,,,,,,,,,,
+KFS,,,,,,,,,,,
