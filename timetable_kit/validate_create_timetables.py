@@ -65,28 +65,29 @@ Usage Examples:
     # Run and check specific spec files (or groups of spec files) and in the final output 
     # print a list of the passing/valid .csv/.toml files:
     ./validate_create_timetables.py -c Acela -p
+    ./validate_create_timetables.py -c 0 1 2 -p
     ./validate_create_timetables.py -c 0-5 -p
 
     # Like the command above, but then generate the timetables for spec files 
     # that pass their checks:
     ./validate_create_timetables.py -c Acela -r
-    ./validate_create_timetables.py -c 0-5 -r
+    ./validate_create_timetables.py -c 0 1 5 -r
 
     # Run and check specific check files, generate the timetables, but also use the "-a" flag
     # to try and get around the "No trip found" errors using "auto-recovery":
     ./validate_create_timetables.py -c Crescent -r -a
-    ./validate_create_timetables.py -c 15 -r -a
+    ./validate_create_timetables.py -c 15 16 -r -a
 
     # Like the command above, but use the "-w 3" flag to look for dates 3 weeks out.
     # This is for the Empire Service:
-    ./validate_create_timetables.py -c 17-20 -r -a -w 3
+    ./validate_create_timetables.py -c 17 18 19 20 -r -a -w 3
 
     # Force individual timetable creation using each .csv file (for trains with 
     # a .list file) to help with debugging/troubleshooting:
     ./validate_create_timetables.py -c Acela -r -f
 
     # Run timetable generation using custom output directory or author credit:
-    ./validate_create_timetables.py -c 0-5 -r --output-dir ./out --author "Your Name <url>"
+    ./validate_create_timetables.py -c 0 1 2 -r --output-dir ./out --author "Your Name <url>"
 
 Finally, a warning will be printed if the GTFS data is too old and needs to be re-downloaded.
 I did not make this download automatically because sometimes you want to run the program using
@@ -115,6 +116,8 @@ Change Log:
 2026-10-03  AI/C.Juckins  Integrated BeautifulSoup HTML cell validation and consolidated summary report.
                           Used to find days frequency problems ("BOS" instead of Mo-Fr, SaSu, etc.)
                           Occurs when invalid station code is used for the train's route.
+2026-10-04  AI/C.Juckins  Enhanced -c / --check argument to seamlessly support multiple space-separated
+                          values, individual indices, ranges, and text queries.
 """
 
 import argparse
@@ -1076,6 +1079,7 @@ def parse_selected_checks(raw_args: list[str]) -> set[int]:
     total_checks = len(CHECKS)
 
     for item in raw_args:
+        # Check if item is a range (e.g., 0-5)
         range_match = re.match(r"^(\d+)-(\d+)$", item)
         if range_match:
             start, end = map(int, range_match.groups())
@@ -1086,6 +1090,7 @@ def parse_selected_checks(raw_args: list[str]) -> set[int]:
                     print(f"Warning: Index {i} out of range (0..{total_checks-1}). Ignored.")
             continue
 
+        # Check if item is a single digit/integer index (e.g., 3)
         if item.isdigit():
             idx = int(item)
             if 0 <= idx < total_checks:
@@ -1094,6 +1099,7 @@ def parse_selected_checks(raw_args: list[str]) -> set[int]:
                 print(f"Warning: Index {idx} out of range (0..{total_checks-1}). Ignored.")
             continue
 
+        # Otherwise, treat as a text query (e.g., Acela)
         matched_any = False
         for idx, check in enumerate(CHECKS):
             if item.lower() in check["name"].lower():
@@ -1123,7 +1129,7 @@ def main():
         "-c", "--check",
         nargs="+",
         metavar="TARGET",
-        help="Specific check index (e.g. 28), index range (e.g. 28-33), or text query (e.g. Acela)"
+        help="Specific check indices (e.g. 0 1 5), index range (e.g. 0-5), or text queries (e.g. Acela)"
     )
     parser.add_argument(
         "-m", "--mismatches-only",
