@@ -7,9 +7,6 @@ so the spec files are updated individually, getting the correct date.  Then go b
 and run one index for that .list train with the -r -a flags (test this).
 """
 
-
-
-
 """
 validate_create_timetables.py
 
@@ -26,6 +23,9 @@ numbers, often with the day of the week, that you can put into the appropriate
 .csv file using a text editor.  You can then open the .csv file using a 
 spreadsheet editor like Open Office "ocalc" to modify columns and rows as 
 needed. 
+
+Prerequisites:
+    pip install beautifulsoup4 (used for checking HTML output)
 
 For example, here is sample output showing the train numbers that should
 appear in a spec file:
@@ -94,22 +94,27 @@ slightly older GTFS data to check for problems that Amtrak unfortunately introdu
 
 
 Change Log:
-2026-08-23  C Juckins  Appended ref_weekday to train numbers in CSV cut & paste output.
-2026-08-23  C Juckins  Updated output order and labeling for train printouts.
-2026-08-23  C Juckins  Preserved train output sequence from list_trains.py (removed numerical sorting)
-                       and added explicit CSV cut & paste output line without single quotes.
-2026-08-21  C Juckins  Added green banner output when GTFS data is current and valid.
-2026-08-21  C Juckins  Added prominent red warning if GTFS file is older than 36 hours (or missing).
-2026-08-21  C Juckins  Added explicit status tracking in summary for auto-recovered timetables.
-2026-08-21  C Juckins  Updated auto-recovery to rewrite .toml reference dates upon successful recovery.
-2026-08-21  C Juckins  Made auto-recovery optional via -a / --auto-recover flag.
-2026-08-21  C Juckins  Added auto-recovery logic for "No trip found" errors using --search 14.
-2026-08-21  C Juckins  Added exit code tracking for timetable creation errors.
-2026-08-21  C Juckins  Added auto-recovery to try additional dates if the "No trip found" 
-                       error occurs on a certain day.
-2026-09-04  C Juckins  Lake Shore Limited needs to ignore trains 50, 51.
-                       Valley Flyer ignores train 125 as it's a special case. 
-2026-09-16  C Juckins  Update documentation and Usage Examples.
+2026-08-20  AI/C.Juckins  Script started.
+2026-08-23  AI/C.Juckins  Appended ref_weekday to train numbers in CSV cut & paste output.
+2026-08-23  AI/C.Juckins  Updated output order and labeling for train printouts.
+2026-08-23  AI/C.Juckins  Preserved train output sequence from list_trains.py (removed numerical sorting)
+                          and added explicit CSV cut & paste output line without single quotes.
+2026-08-21  AI/C.Juckins  Added green banner output when GTFS data is current and valid.
+2026-08-21  AI/C.Juckins  Added prominent red warning if GTFS file is older than 36 hours (or missing).
+2026-08-21  AI/C.Juckins  Added explicit status tracking in summary for auto-recovered timetables.
+2026-08-21  AI/C.Juckins  Updated auto-recovery to rewrite .toml reference dates upon successful recovery.
+2026-08-21  AI/C.Juckins  Made auto-recovery optional via -a / --auto-recover flag.
+2026-08-21  AI/C.Juckins  Added auto-recovery logic for "No trip found" errors using --search 14.
+2026-08-21  AI/C.Juckins  Added exit code tracking for timetable creation errors.
+2026-08-21  AI/C.Juckins  Added auto-recovery to try additional dates if the "No trip found" 
+                          error occurs on a certain day.
+2026-09-04  AI/C.Juckins  Lake Shore Limited needs to ignore trains 50, 51.
+                          Valley Flyer ignores train 125 as it's a special case. 
+2026-09-16  AI/C.Juckins  Update documentation and Usage Examples.
+2026-09-28  AI/C.Juckins  Update notes for some NEC LD trains. 
+2026-10-03  AI/C.Juckins  Integrated BeautifulSoup HTML cell validation and consolidated summary report.
+                          Used to find days frequency problems ("BOS" instead of Mo-Fr, SaSu, etc.)
+                          Occurs when invalid station code is used for the train's route.
 """
 
 import argparse
@@ -122,6 +127,7 @@ import time
 from datetime import date, timedelta
 from pathlib import Path
 from typing import Optional, Tuple
+from bs4 import BeautifulSoup
 
 # ---------------------------------------------------------------------------
 # Configuration - adjust these if your paths differ
@@ -240,6 +246,7 @@ CHECKS = [
 
     {
         "name": "California Zephyr",
+        # Include buses in spec file for timetable completeness.
         "day": None,
         "sort": ["CHI", "CHI", "EMY", "EMY", "CHI"],
         "csv": SPECS_DIR / "california-zephyr.csv",
@@ -274,7 +281,33 @@ CHECKS = [
     },
 
     {
+        "name": "Cascades - Northbound",
+        "day": None,
+        "sort": ["SEA", "SEA", "VAC", "PDX", "SEA", "EUG", "PDX"],
+        "csv": SPECS_DIR / "cascades-nb.csv",
+        "ref_weekday": "tuesday",
+        "spec": "cascades.list",
+    },
+    {
+        "name": "Cascades - Southbound",
+        "day": None,
+        "sort": ["SEA", "VAC", "SEA", "SEA", "PDX", "PDX", "EUG"],
+        "csv": SPECS_DIR / "cascades-sb.csv",
+        "ref_weekday": "tuesday",
+        "spec": "cascades.list",
+    },
+
+    {
+        "name": "City of New Orleans / Illini / Saluki",
+        "day": None,
+        "sort": ["CHI", "CHI", "CDL", "CDL", "CHI"],
+        "csv": SPECS_DIR / "city-of-new-orleans-illini-saluki.csv",
+        "ref_weekday": "tuesday",
+    },
+
+    {
         "name": "Coast Starlight",
+        # Include buses in spec file for timetable completeness.
         "day": None,
         "sort": ["SEA", "SEA", "LAX", "LAX", "SEA"],
         "csv": SPECS_DIR / "coast-starlight.csv",
@@ -349,6 +382,7 @@ CHECKS = [
 
     {
         "name": "Heartland Flyer",
+        # Include multiple trains in spec file for timetable completeness.
         "day": None,
         "sort": ["OKC", "OKC", "FTW", "FTW", "OKC"],
         "csv": SPECS_DIR / "heartland-flyer.csv",
@@ -444,6 +478,7 @@ CHECKS = [
 
     {
         "name": "Maple Leaf",
+        # Include 7097,7098 in spec file because these are VIA train numbers.
         "day": None,
         "sort": ["TWO", "TWO", "NFS", "NFS", "TWO", "NFL", "NYP", "NYP", "NFL"],
         "csv": SPECS_DIR / "maple-leaf.csv",
@@ -506,7 +541,9 @@ CHECKS = [
     },
     {
         "name": "NEC Boston-Washington - Saturday Northbound",
-        # For Saturday NB Crescent, use '20 Saturday / PHL'
+        # For Saturday NB Crescent, use '20 Saturday / PHL'.
+        # For Saturday NB Silver Meteor, use '98 Friday / PHL'.
+        # Ignore 50 because it operates on the NEC Sundays.
         "script": "./list_trains.py",
         "day": "saturday",
         "sort": ["PHL", "NYP", "BOS", "WAS", "NYP", "PHL", "NYP", "RNK", "PHL", "NPN", "PHL", "RNK", "PHL"],
@@ -526,6 +563,9 @@ CHECKS = [
     },
     {
         "name": "NEC Boston-Washington - Sunday Northbound",
+        # For Sunday NB Crescent, use '20 Saturday / PHL' (check with N.N. - correct data by I'm confused)
+        # For Sunday NB Silver Meteor, use '98 Saturday / PHL'.
+        # Include 50 in spec file because it operates on the NEC Sundays.
         "script": "./list_trains.py",
         "day": "sunday",
         "sort": ["PHL", "NYP", "BOS", "WAS", "NYP", "PHL", "NYP", "RNK", "PHL", "NPN", "PHL", "RNK", "PHL"],
@@ -797,6 +837,62 @@ def run_list_trains(script_cmd: str, reference_date: str, day: Optional[str], so
     found_lines = [line for line in result.stdout.splitlines() if "found" in line]
     cleaned_lines = [line.replace("'", "").replace(" ", "") for line in found_lines]
     return "\n".join(cleaned_lines)
+
+
+def validate_timetable_html(html_path: Path) -> list[str]:
+    """Scans the generated HTML timetable file for problematic 3-character 
+    all-CAPS codes (e.g., 'BOS') under columns labeled 'Train #'.
+    Returns a list of warning message strings found.
+    """
+    warnings = []
+    if not html_path.exists():
+        print(f"HTML Validation Notice: File not found ({html_path.name})")
+        return warnings
+
+    try:
+        with html_path.open("r", encoding="utf-8") as f:
+            soup = BeautifulSoup(f, 'html.parser')
+    except Exception as e:
+        print(f"Error parsing HTML file {html_path.name}: {e}")
+        return warnings
+
+    table = soup.find('table', class_='tt-table')
+    if not table:
+        return warnings
+
+    header_row = table.find('thead')
+    if not header_row:
+        return warnings
+
+    train_col_indices = []
+    header_cells = header_row.find_all(['th', 'td'])
+    for idx, cell in enumerate(header_cells):
+        if 'Train #' in cell.get_text():
+            train_col_indices.append(idx)
+
+    if not train_col_indices:
+        return warnings
+
+    pattern = re.compile(r'^[A-Z]{3}$')
+    tbody = table.find('tbody')
+    if not tbody:
+        return warnings
+
+    for row_idx, row in enumerate(tbody.find_all('tr'), start=1):
+        cells = row.find_all(['td', 'th'])
+        for col_idx in train_col_indices:
+            if col_idx < len(cells):
+                cell_text = cells[col_idx].get_text(strip=True)
+                if pattern.match(cell_text):
+                    msg = f"Row {row_idx}, Col {col_idx + 1} under 'Train #': '{cell_text}'"
+                    warnings.append(msg)
+
+    if warnings:
+        print(f"  [HTML VALIDATION] Found {len(warnings)} problematic cell(s) in {html_path.name}.")
+    else:
+        print(f"  [HTML VALIDATION] {html_path.name} passed cell validation (0 issues).")
+
+    return warnings
 
 
 def create_timetable(spec: str, output_dir: Path, author: str, auto_recover: bool = False) -> Tuple[str, int, Optional[str]]:
@@ -1137,9 +1233,10 @@ def main():
         specs_to_create = [s for s in candidate_specs if s not in failed_specs]
         skipped_specs = sorted(failed_specs)
 
-    # Optional Timetable Generation Phase
+    # Optional Timetable Generation & HTML Validation Phase
     created_timetables = []
     failed_generations = []
+    html_warnings_collection = []
 
     if args.run_create:
         print("=== Running Timetable Generation Phase ===")
@@ -1155,10 +1252,19 @@ def main():
                 )
                 if status in ("CREATED", "RECOVERED"):
                     created_timetables.append((spec_target, status, recovered_date))
+                    
+                    # Validate the generated HTML output file for problematic cells
+                    html_file = args.output_dir / f"{spec_target}.html"
+                    print(f"Validating HTML cell output for: {html_file.name}")
+                    file_warnings = validate_timetable_html(html_file)
+                    for warning in file_warnings:
+                        html_warnings_collection.append((spec_target, warning))
                 else:
                     failed_generations.append((spec_target, code))
 
-    print("=== Summary ===")
+    print("")
+    print("")
+    print("=== Processing Summary ===")
     all_ok = True
     mismatches_found = False
 
@@ -1204,6 +1310,13 @@ def main():
                     print(f"  [SKIPPED]   {spec}")
             else:
                 print("  No timetables were skipped.")
+
+        print("\n=== HTML Validation Problems (check 'days' frequency [Daily, Mo-Fr, etc]. ===")
+        if html_warnings_collection:
+            for spec, warning_msg in html_warnings_collection:
+                print(f"  [{spec}.html] {warning_msg}")
+        else:
+            print("  No HTML validation issues found.")
 
     # Final GTFS status check at conclusion
     check_gtfs_file_age()
