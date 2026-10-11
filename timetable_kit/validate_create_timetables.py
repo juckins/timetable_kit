@@ -118,9 +118,28 @@ Change Log:
                           Occurs when invalid station code is used for the train's route.
 2026-10-04  AI/C.Juckins  Enhanced -c / --check argument to seamlessly support multiple space-separated
                           values, individual indices, ranges, and text queries.
+2026-10-11  AI/C.Juckins  Enhancements for advanced timetable creation and troubleshooting:
+                          Added a new argument --combine-pdfs that combines separate PDF files for .list 
+                          spec files (requires -r, -a, and -f).  This can be used when a .list PDF fails
+                          to be created because of 'No trip found' errors.
+                          Similarly, the new argument --combine-htmls will combine separate HTML pages 
+                          for .list spec files (also requires -r, -a, and -f) when a .list HTML fails 
+                          to get created.  NOTE: --combine-htmls requires Ghostscript 'gs' on linux.
+                          An example command to use these options is the following:
+
+                          ./validate_create_timetables.py -c 12-13 -w 3 -r -a -f --combine-pdfs --combine-htmls
+
+                          -c 12-13: the 2 Carolinian spec files.
+                              -w 3: looks for a valid date 3 weeks out.
+                                -r: runs timetable creation to make the PDFs/HTML files.
+                                -a: automatically searches for a valid reference date and retries timetable
+                                    creation if 'No trip found' error occurs.
+                                -f: forces timetable generation for individual spec files, ignoring group 
+                                    list files (useful when the .list fails to get created).
 """
 
 import argparse
+import glob
 import os
 import subprocess
 import sys
@@ -676,7 +695,7 @@ CHECKS = [
         "day": "weekend",
         "sort": ["RVR", "WAS", "RVR"],
         "csv": SPECS_DIR / "richmond-weekend-sb.csv",
-        "ref_weekday": "tuesday",
+        "ref_weekday": "saturday",
         "spec": "virginia-services.list",
     },
     {
@@ -1162,6 +1181,16 @@ def main():
         help="Force timetable generation for individual check specs, ignoring group list files"
     )
     parser.add_argument(
+        "--combine-pdfs",
+        action="store_true",
+        help="Combine separate PDF files for .list spec files (requires -r, -a, and -f)"
+    )
+    parser.add_argument(
+       "--combine-htmls",
+        action="store_true",
+        help="Combine separate HTML pages for .list spec files (requires -r, -a, and -f) - NOTE: this requires 'gs' on linux"
+    )
+    parser.add_argument(
         "--output-dir",
         type=Path,
         default=DEFAULT_OUTPUT_DIR,
@@ -1202,6 +1231,7 @@ def main():
     candidate_specs = []
     failed_specs = set()
     individual_specs_to_create = []
+    list_spec_groups = {} # Maps .list spec names to lists of generated PDF paths
 
     for idx, check in checks_to_run:
         matched = run_check(
@@ -1215,6 +1245,12 @@ def main():
         csv_stem = check["csv"].stem
         spec_target = csv_stem if args.force_individual else check.get("spec", csv_stem)
         
+        # Track .list group associations for PDF combination when force-individual is active
+        list_spec = check.get("spec")
+        if list_spec and list_spec.endswith(".list"):
+            pdf_path = args.output_dir / f"{csv_stem}.pdf"
+            list_spec_groups.setdefault(list_spec, []).append(pdf_path)
+
         if matched:
             ok_filenames.add(check["csv"].name)
             ok_filenames.add(check["csv"].with_suffix(".toml").name)
@@ -1267,6 +1303,185 @@ def main():
                         html_warnings_collection.append((spec_target, warning))
                 else:
                     failed_generations.append((spec_target, code))
+
+    print("")
+    print("=== HTML Validation Problems (check 'days' frequency [Daily, Mo-Fr, etc]. ===")
+    if html_warnings_collection:
+        for spec, warning_msg in html_warnings_collection:
+            print(f"  [{spec}.html] {warning_msg}")
+    else:
+        print("  No HTML validation issues found.")
+
+    # ---------------------------------------------------------------------------
+    # PDF Combination Phase (Restricted to .list spec files)
+    # ---------------------------------------------------------------------------
+    if args.combine_pdfs:
+        if args.run_create and args.auto_recover and args.force_individual:
+            print("\n=== Combining PDF Files for .list Specs ===")
+            if not list_spec_groups:
+                print("  No .list spec files found among the processed checks.")
+            else:
+                for list_spec, pdf_paths in list_spec_groups.items():
+                    base_name = Path(list_spec).stem
+                    output_pdf = args.output_dir / f"{base_name}.pdf"
+                    
+                    # Filter paths that actually exist on disk
+                    valid_pdfs = [p for p in pdf_paths if p.exists()]
+                    
+                    if not valid_pdfs:
+                        print(f"  [SKIP] No generated PDFs found for {list_spec}")
+                        continue
+                    
+                    # Construct Ghostscript command: gs -dNOPAUSE -sDEVICE=pdfwrite -sOUTPUTFILE=... -dBATCH inputs...
+                    gs_cmd = [
+                        "gs",
+                        "-dNOPAUSE",
+                        "-sDEVICE=pdfwrite",
+                        f"-sOUTPUTFILE={output_pdf}",
+                        "-dBATCH"
+                    ] + [str(p) for p in valid_pdfs]
+                    
+                    print(f"Executing: {shlex.join(gs_cmd)}")
+                    try:
+                        gs_result = subprocess.run(
+                            gs_cmd,
+                            capture_output=True,
+                            text=True,
+                            check=True
+                        )
+                        print(f"  [SUCCESS] Combined into {output_pdf.name}")
+                    except subprocess.CalledProcessError as gs_err:
+                        print(f"  [ERROR] Ghostscript failed for {base_name}.pdf (exit code {gs_err.returncode})")
+                        if gs_err.stderr:
+                            print(f"    stderr:\n{gs_err.stderr}")
+                    except FileNotFoundError:
+                        print("  [ERROR] Ghostscript ('gs') binary not found in system path.")
+        else:
+            missing_flags = []
+            if not args.run_create: missing_flags.append("-r")
+            if not args.auto_recover: missing_flags.append("-a")
+            if not args.force_individual: missing_flags.append("-f")
+            
+            print(f"\nLOG ENTRY: '--combine-pdfs' was requested, but missing required argument(s): {', '.join(missing_flags)}. Skipping PDF combination and continuing.")
+
+    # ---------------------------------------------------------------------------
+    # HTML Combination Phase (Restricted to .list spec files)
+    # ---------------------------------------------------------------------------
+    if args.combine_htmls:
+        if args.run_create and args.auto_recover and args.force_individual:
+            print("\n=== Combining HTML Files for .list Specs ===")
+            if not list_spec_groups:
+                print("  No .list spec files found among the processed checks.")
+            else:
+                for list_spec, pdf_paths in list_spec_groups.items():
+                    base_name = Path(list_spec).stem
+                    output_html = args.output_dir / f"{base_name}.html"
+
+                    # Derive the corresponding HTML paths from the PDF paths
+                    html_paths = [p.with_suffix(".html") for p in pdf_paths]
+
+                    # Filter paths that actually exist on disk
+                    valid_htmls = [p for p in html_paths if p.exists()]
+
+                    if not valid_htmls:
+                        print(f"  [SKIP] No generated HTML files found for {list_spec}")
+                        continue
+
+                    print(f"Combining {len(valid_htmls)} HTML files into {output_html.name}...")
+                    try:
+                        combined_content = []
+                        all_page_css = []
+                        
+                        # Read the head/boilerplate from the first valid HTML file with safe encoding fallback
+                        first_content = ""
+                        for enc in ("utf-8", "latin-1"):
+                            try:
+                                with open(valid_htmls[0], "r", encoding=enc, errors="replace") as f:
+                                    first_content = f.read()
+                                break
+                            except Exception:
+                                continue
+
+                        # Extract page-specific CSS from ALL valid files
+                        for html_path in valid_htmls:
+                            file_content = ""
+                            for enc in ("utf-8", "latin-1"):
+                                try:
+                                    with open(html_path, "r", encoding=enc, errors="replace") as f:
+                                        file_content = f.read()
+                                    break
+                                except Exception:
+                                    continue
+                            
+                            # Find page-specific CSS block in this file
+                            style_end_idx = file_content.lower().find("</style>")
+                            if style_end_idx != -1:
+                                style_content = file_content[:style_end_idx]
+                                page_css_idx = style_content.find("/* Page specific CSS")
+                                if page_css_idx != -1:
+                                    all_page_css.append(style_content[page_css_idx:])
+
+                        # Build the combined head section up to </head>
+                        head_end_idx = first_content.lower().find("</head>")
+                        if head_end_idx != -1:
+                            # Find where </style> is in the first content so we can inject all page CSS before it closes
+                            style_tag_end = first_content.lower().find("</style>")
+                            if style_tag_end != -1:
+                                base_style_part = first_content[:style_tag_end]
+                                # Remove the first file's single page CSS if we are going to re-add all of them cleanly
+                                clean_style_part = base_style_part.split("/* Page specific CSS")[0]
+                                
+                                new_style_block = clean_style_part + "\n" + "\n".join(all_page_css) + "\n</style>\n</head>\n<body>\n"
+                                combined_content.append(first_content[:first_content.lower().find("<style>")] + new_style_block)
+                            else:
+                                combined_content.append(first_content[:head_end_idx + len("</head>")] + "\n<body>\n")
+                        else:
+                            combined_content.append("<!DOCTYPE html>\n<html>\n<head>\n<meta charset='utf-8'>\n</head>\n<body>\n")
+
+                        # Extract and append the <section>...</section> block from each page file
+                        for html_path in valid_htmls:
+                            file_content = ""
+                            for enc in ("utf-8", "latin-1"):
+                                try:
+                                    with open(html_path, "r", encoding=enc, errors="replace") as f:
+                                        file_content = f.read()
+                                    break
+                                except Exception:
+                                    continue
+
+                            start = file_content.lower().find("<section")
+                            end = file_content.lower().rfind("</section>") + len("</section>")
+                            
+                            if start != -1 and end != -1:
+                                combined_content.append(file_content[start:end] + "\n")
+                            else:
+                                body_start = file_content.lower().find("<body>")
+                                body_end = file_content.lower().find("</body>")
+                                if body_start != -1 and body_end != -1:
+                                    body_content_start = body_start + len("<body>")
+                                    combined_content.append(file_content[body_content_start:body_end] + "\n")
+                                else:
+                                    combined_content.append(file_content + "\n")
+
+                        # Add closing tags
+                        combined_content.append("</body>\n</html>")
+
+                        # Write out the merged file
+                        with open(output_html, "w", encoding="utf-8") as out_f:
+                            out_f.writelines(combined_content)
+
+                        print(f"  [SUCCESS] Combined into {output_html.name}")
+
+                    except Exception as html_err:
+                        print(f"  [ERROR] Failed to combine HTML files for {base_name}.html: {html_err}")
+
+        else:
+            missing_flags = []
+            if not args.run_create: missing_flags.append("-r")
+            if not args.auto_recover: missing_flags.append("-a")
+            if not args.force_individual: missing_flags.append("-f")
+
+            print(f"\nLOG ENTRY: '--combine-htmls' was requested, but missing required argument(s): {', '.join(missing_flags)}. Skipping HTML combination and continuing.")
 
     print("")
     print("")
