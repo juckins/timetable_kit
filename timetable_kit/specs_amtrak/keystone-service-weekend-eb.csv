@@ -1,15 +1,15 @@
-,mile,access,station,660 saturday,662 saturday,664 saturday,666 saturday,42 saturday,670 saturday,672 saturday,674 saturday,674 sunday
+,mile,access,station,630 saturday,660 saturday,664 saturday,666 saturday,42 saturday,670 saturday,672 saturday,44 saturday,676 saturday
 column-options,,,,ardp,,,,,,,,
 route-name,,,,,,,,,,,,
 days,,,,HAR,HAR,HAR,HAR,HAR,HAR,HAR,HAR,HAR
-PGH,0,,,blank,blank,blank,blank,,blank,blank,blank,blank
-GNB,31,,,blank,blank,blank,blank,,blank,blank,blank,blank
-LAB,41,,,blank,blank,blank,blank,,blank,blank,blank,blank
-JST,78,,,blank,blank,blank,blank,,blank,blank,blank,blank
-ALT,117,,,blank,blank,blank,blank,,blank,blank,blank,blank
-TYR,131,,,blank,blank,blank,blank,,blank,blank,blank,blank
-HGD,151,,,blank,blank,blank,blank,,blank,blank,blank,blank
-LEW,188,,,blank,blank,blank,blank,,blank,blank,blank,blank
+PGH,0,,,,,,,,,,,
+GNB,31,,,,,,,,,,,
+LAB,41,,,,,,,,,,,
+JST,78,,,,,,,,,,,
+ALT,117,,,,,,,,,,,
+TYR,131,,,,,,,,,,,
+HGD,151,,,,,,,,,,,
+LEW,188,,,,,,,,,,,
 HAR,249<hr>0,,,,,,,,,,,
 MID,10,,,,,,,,,,,
 ELT,18,,,,,,,,,,,
