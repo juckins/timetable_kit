@@ -136,6 +136,7 @@ Change Log:
                                     creation if 'No trip found' error occurs.
                                 -f: forces timetable generation for individual spec files, ignoring group 
                                     list files (useful when the .list fails to get created).
+2026-10-13  AI/C.Juckins  Fix bug when checking valid days frequency problems.
 """
 
 import argparse
@@ -549,7 +550,7 @@ CHECKS = [
         "day": "weekday",
         "sort": ["PHL", "NYP", "BOS", "WAS", "NYP", "PHL", "NYP", "RNK", "PHL", "NPN", "PHL", "RNK", "PHL"],
         "csv": SPECS_DIR / "nec-bos-was-weekday-nb.csv",
-        "ref_weekday": "monday",
+        "ref_weekday": "wednesday",
         "spec": "nec-bos-was.list",
     },
     {
@@ -863,7 +864,7 @@ def run_list_trains(script_cmd: str, reference_date: str, day: Optional[str], so
 
 def validate_timetable_html(html_path: Path) -> list[str]:
     """Scans the generated HTML timetable file for problematic 3-character 
-    all-CAPS codes (e.g., 'BOS') under columns labeled 'Train #'.
+    all-CAPS station codes (e.g., 'WAS') appearing in days-of-week cells.
     Returns a list of warning message strings found.
     """
     warnings = []
@@ -878,41 +879,35 @@ def validate_timetable_html(html_path: Path) -> list[str]:
         print(f"Error parsing HTML file {html_path.name}: {e}")
         return warnings
 
-    table = soup.find('table', class_='tt-table')
-    if not table:
-        return warnings
-
-    header_row = table.find('thead')
-    if not header_row:
-        return warnings
-
-    train_col_indices = []
-    header_cells = header_row.find_all(['th', 'td'])
-    for idx, cell in enumerate(header_cells):
-        if 'Train #' in cell.get_text():
-            train_col_indices.append(idx)
-
-    if not train_col_indices:
+    # Find ALL tables in the document (multi-page timetables have multiple tables)
+    tables = soup.find_all('table', class_='tt-table')
+    if not tables:
         return warnings
 
     pattern = re.compile(r'^[A-Z]{3}$')
-    tbody = table.find('tbody')
-    if not tbody:
-        return warnings
+    
+    # Loop through every table across all pages
+    for table_idx, table in enumerate(tables, start=1):
+        dow_cells = table.find_all(class_='days-of-week-cell')
+        if not dow_cells:
+            continue
 
-    for row_idx, row in enumerate(tbody.find_all('tr'), start=1):
-        cells = row.find_all(['td', 'th'])
-        for col_idx in train_col_indices:
-            if col_idx < len(cells):
-                cell_text = cells[col_idx].get_text(strip=True)
-                if pattern.match(cell_text):
-                    msg = f"Row {row_idx}, Col {col_idx + 1} under 'Train #': '{cell_text}'"
-                    warnings.append(msg)
+        for cell_idx, cell in enumerate(dow_cells):
+            cell_text = cell.get_text(strip=True)
+            if pattern.match(cell_text):
+                # Extract row/col info from classes if available for precise reporting
+                classes = cell.get('class', [])
+                row_info = next((c for c in classes if c.startswith('row')), "unknown row")
+                col_info = next((c for c in classes if c.startswith('col')), "")
+                col_display = col_info.replace('col', '') if col_info else str(cell_idx + 1)
+                
+                msg = f"Invalid 3-letter code '{cell_text}' found in days-of-week cell (Page Table {table_idx}, {row_info}, Col {col_display})."
+                warnings.append(msg)
 
     if warnings:
-        print(f"  [HTML VALIDATION] Found {len(warnings)} problematic cell(s) in {html_path.name}.")
+        print(f"  [HTML VALIDATION] Found {len(warnings)} problematic days-of-week cell(s) in {html_path.name}.")
     else:
-        print(f"  [HTML VALIDATION] {html_path.name} passed cell validation (0 issues).")
+        print(f"  [HTML VALIDATION] {html_path.name} passed days-of-week cell validation (0 issues).")
 
     return warnings
 
