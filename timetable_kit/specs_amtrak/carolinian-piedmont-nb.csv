@@ -1,4 +1,4 @@
-, station,mile, access,20 saturday,20 sunday,80,72,74,76,78
+, station,mile, access,20 saturday,20 sunday,80,72,74,76 monday,78
 column-options,,,,,,,,,,ardp
 route-name,,,,,,,,,,
 days,,,,CLT,CLT,CLT,CLT,CLT,CLT,CLT
