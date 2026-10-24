@@ -137,6 +137,13 @@ Change Log:
                                 -f: forces timetable generation for individual spec files, ignoring group 
                                     list files (useful when the .list fails to get created).
 2026-10-13  AI/C.Juckins  Fix bug when checking valid days frequency problems.
+2026-10-24  C.Juckins     Added a "split" Vermonter (weekdays and weekends separated). Only way to create
+                          a document when GTFS data is wonky and you need to create the weekday with 1 
+                          calendar date and the weekend with another calendar date. The manually-combined
+                          PDF using ghostscript can be run on the command line using the generated output 
+                          files, like this:
+                          $ gs -dNOPAUSE -sDEVICE=pdfwrite -sOUTPUTFILE=vermonter.pdf \
+                            -dBATCH vermonter-split-weekend.pdf vermonter-split-weekday.pdf
 """
 
 import argparse
@@ -674,6 +681,26 @@ CHECKS = [
         "csv": SPECS_DIR / "vermonter.csv",
         "ref_weekday": "tuesday",
     },
+
+    # This is a "split" Vermonter comprised of separate weekday and
+    # weekend schedule pages due to GTFS oddities.
+    {
+        "name": "Vermonter - Weekday",
+        "day": "weekday",
+        "sort": ["SAB", "SAB", "WAS", "WAS", "SAB"],
+        "csv": SPECS_DIR / "vermonter-split-weekday.csv",
+        "ref_weekday": "tuesday",
+        "spec": "vermonter-split.list",
+    },
+    {
+        "name": "Vermonter - Weekend",
+        "day": "weekend",
+        "sort": ["SAB", "SAB", "WAS", "WAS", "SAB"],
+        "csv": SPECS_DIR / "vermonter-split-weekend.csv",
+        "ref_weekday": "saturday",
+        "spec": "vermonter-split.list",
+    },
+
 
     {
         "name": "Virginia Services (Richmond - Weekday Southbound)",
