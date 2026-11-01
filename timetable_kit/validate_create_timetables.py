@@ -317,6 +317,7 @@ CHECKS = [
         "csv": SPECS_DIR / "cascades-nb.csv",
         "ref_weekday": "tuesday",
         "spec": "cascades.list",
+        "allowed_csv_trains": ['5622', '5604'],
     },
     {
         "name": "Cascades - Southbound",
@@ -325,6 +326,7 @@ CHECKS = [
         "csv": SPECS_DIR / "cascades-sb.csv",
         "ref_weekday": "tuesday",
         "spec": "cascades.list",
+        "allowed_csv_trains": ['5605', '5677'],
     },
 
     {
