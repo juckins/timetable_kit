@@ -12,11 +12,26 @@ A couple of key pieces of data are only exposed as HTML, so the HTML is download
 The other routines here are for accessing it.
 
 get_station_name is the primary one.
+
+Summary of URLs needed:
+All Amtrak stations:
+https://www.amtrak.com/services/data.stations.json
+
+Example Yuma, AZ station page:
+https://www.amtrak.com/content/amtrak/en-us/stations/yum.html
+
+Example Yuma, AZ JSON data:
+https://www.amtrak.com/content/amtrak/en-us/stations/yum.stationTabContainer.YUM.json
+
 """
 
 # "./json_stations.py download"
 # will download Amtrak's station files into the './stations/' directory
 # otherwise runs test case
+#
+# Change Log:
+# 2026-11-01  C.Juckins  Add required HTTP headers to get data from Amtrak's website.
+
 
 import sys
 from pathlib import Path
@@ -37,6 +52,24 @@ from timetable_kit.file_locations import get_timetable_kit_data_home
 
 # INITIALIZATION CODE
 # GLOBAL VARIABLES
+
+headers = {
+    'Host': 'www.amtrak.com',
+    'Connection': 'keep-alive',
+    'Accept': 'application/json, text/plain, */*',
+    'user-agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/157.0.0.0 Safari/537.36',
+    'x-amtrak-trace-id': '7314767f47e01441ab49a3d460cc6a93905c1763133999075',
+    'Content-Type': 'application/json',
+    'sec-ch-ua': '"Not-A.Brand";v="99", "Google Chrome";v="157", "Chromium";v="157"',
+    'sec-ch-ua-mobile': '?0',
+    'sec-ch-ua-platform': '"Linux"',
+    'Sec-Fetch-Site': 'same-origin',
+    'Sec-Fetch-Mode': 'cors',
+    'Sec-Fetch-Dest': 'empty',
+    'Referer': 'https://www.amtrak.com/tickets/train-status.html',
+    'Accept-Encoding': 'gzip, deflate, br',
+    'Accept-Language': 'en-US,en;q=0.9',
+}
 
 # This is the entire station list as json -- names and all.
 stations_json_url = "https://www.amtrak.com/services/data.stations.json"
@@ -66,7 +99,7 @@ def stations_json_local_path():
 def download_stations_json() -> str:
     """Download Amtrak's basic stations database as json text; return it."""
     # This uses the 'requests' package to download it
-    response = requests.get(stations_json_url)
+    response = requests.get(stations_json_url, headers=headers)
     return response.text
 
 
@@ -146,7 +179,7 @@ def download_station_details(station_code: str) -> str:
     station_details_dir.mkdir(parents=True, exist_ok=True)
 
     response = requests.get(
-        station_details_url(station_code), timeout=60
+        station_details_url(station_code), headers=headers, timeout=60
     )  # Minute-long timeout
     # This suffers from the possibility of failure.
     my_text = response.text
@@ -229,7 +262,7 @@ def station_details_html_local_path(station_code: str) -> Path:
 
 def download_station_details_html(station_code: str) -> str:
     """Download station HTML file for one station; return it."""
-    response = requests.get(station_details_html_url(station_code))
+    response = requests.get(station_details_html_url(station_code), headers=headers)
     # This suffers from the possibility of failure.
     my_text = response.text
     if response.status_code != requests.codes.ok:
