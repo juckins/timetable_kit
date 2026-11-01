@@ -1,8 +1,9 @@
 title = "Cascades Northbound"
 heading = "Cascades: Northbound"
 aria_label = "Cascades Northbound"
-reference_date = "20261006"
+reference_date = "20261110"
 programmers_warning = "Oregon Point buses missing.  Coast Starlight duplicate timetable problems."
+top_text = "NOTE: Additional bus service is offered but not shown on the timetable below.  Check <b><a href=\"https://www.amtrak.com/\">www.amtrak.com</a></b> for the latest information.<br><br>Vancouver, BC (Canada) observes permanent Daylight Saving Time (abbreviation PCT)."
 key_baggage = true
 for_rpa = true
 key_bus = true

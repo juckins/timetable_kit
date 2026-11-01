@@ -1,24 +1,25 @@
-,stations,timezone,access,503 tuesday,505 tuesday,11 tuesday,517 tuesday,507 tuesday,509 tuesday,511 tuesday,519 tuesday
-column-options,,,,,,,,,,ardp,ardp
-route-name,,,,,,,,,,,
-days,,,,SEA,SEA,SEA,SEA,SEA,SEA,SEA,SEA
-VAC,,,,,,,,,,,
-BEL,,,,,,,,,,,
-MVW,,,,,,,,,,,
-STW,,,,,,,,,,,
-EVR,,,,,,,,,,,
-EDM,,,,,,,,,,,
-SEA,,,,,,,,,,,
-TUK,,,,,,,,,,,
-TAC,,,,,,,,,,,
-OLW,,,,,,,,,,,
-CTL,,,,,,,,,,,
-KEL,,,,,,,,,,,
-VAN,,,,,,,,,,,
-PDX,,,,,,,,,,,
-ORC,,,,,,,,,,,
-SLM,,,,,,,,,,,
-ALY,,,,,,,,,,,
-EUG,,,,,,,,,,,
-CMO,,,,,,,,,,,
-KFS,,,,,,,,,,,
+,stations,mile,access,timezone,503,505,11,517,507 / 5605 noheader,509 / 5677 noheader,511,519
+column-options,,,,,ardp,,,,,,,ardp
+route-name,,,,,,,,,,,,
+days,,,,,SEA,SEA,SEA,SEA,SEA,SEA,SEA,SEA
+VAC,,0,,PCT,blank,blank,"<div style=""text-align: center;"">Bus<br>service</div> ",,blank,blank,"<div style=""text-align: center;"">Bus<br>service</div> ",
+BEL,,62,,,blank,blank,"<div style=""text-align: center;"">operates<br>to</div> ",,5605 first two_row,5677 first two_row,"<div style=""text-align: center;"">operates<br>to</div> ",
+MVW,,88,,,blank,blank,"<div style=""text-align: center;"">Seattle</div> ",,,,"<div style=""text-align: center;"">Seattle</div> ",
+STW,,103,,,blank,blank,downarrow,,5605 blank,5677 blank,downarrow,
+EVR,,123,,,blank,blank,downarrow,,,,downarrow,
+EDM,,139,,,blank,blank,downarrow,,5605 blank,5677 blank,downarrow,
+SEA,,157,,,blank,blank,downarrow,517 last two_row,5605 last two_row,5677 last two_row,downarrow,519 last two_row
+SEA,,157,,,503 first two_row,505 first two_row,11 first two_row,517 first two_row,507 first two_row,509 first two_row,511 first two_row,blank
+TUK,,168,,,,,,,,,,blank
+TAC,,196,,,,,,,,,,blank
+OLW,,232,,,,,,,,,,blank
+CTL,,251,,,,,,,,,,blank
+KEL,,294,,,,,,,,,,blank
+VAN,,334,,,,,,,,,,blank
+PDX,,344,,,503 last two_row,505 last two_row,11 last two_row,517 last two_row,507 last two_row,509 last two_row,511 last two_row,blank
+PDX,,344,,,503 first two_row,"<div style=""text-align: center;"">Bus<br>service</div> ",11 first two_row,"<div style=""text-align: center;"">Bus<br>service</div> ",507 first two_row,"<div style=""text-align: center;"">Bus<br>service</div> ",blank,blank
+ORC,,359,,,,"<div style=""text-align: center;"">operates</div> ",,"<div style=""text-align: center;"">operates</div> ",,"<div style=""text-align: center;"">operates</div> ",blank,blank
+SLM,,396,,,,"<div style=""text-align: center;"">to</div> ",,"<div style=""text-align: center;"">to</div> ",,"<div style=""text-align: center;"">to</div> ",blank,blank
+ALY,,424,,,,"<div style=""text-align: center;"">Eugene</div> ",,"<div style=""text-align: center;"">Eugene</div> ",,"<div style=""text-align: center;"">Eugene</div> ",blank,blank
+EUG,,467,,,,downarrow,11 last two_row,downarrow,,downarrow,blank,blank
+destination,,,,,,,,,,,,
