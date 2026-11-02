@@ -31,7 +31,7 @@ https://www.amtrak.com/content/amtrak/en-us/stations/yum.stationTabContainer.YUM
 #
 # Change Log:
 # 2026-11-01  C.Juckins  Add required HTTP headers to get data from Amtrak's website.
-
+#                        Retry the download 2 more times if initial attempt fails.  
 
 import sys
 from pathlib import Path
@@ -97,10 +97,27 @@ def stations_json_local_path():
 
 
 def download_stations_json() -> str:
-    """Download Amtrak's basic stations database as json text; return it."""
-    # This uses the 'requests' package to download it
-    response = requests.get(stations_json_url, headers=headers)
-    return response.text
+    """Download Amtrak's basic stations database as json text; return it with retries."""
+    max_retries = 3
+    my_text = "{}"
+    
+    for attempt in range(max_retries):
+        try:
+            response = requests.get(stations_json_url, headers=headers, timeout=60)
+            if response.status_code == requests.codes.ok:
+                my_text = response.text
+                break
+            else:
+                print(f"Attempt {attempt + 1} for stations_json: returned error {response.status_code}.")
+        except requests.exceptions.RequestException as e:
+            print(f"Attempt {attempt + 1} for stations_json: connection error ({e}).")
+        
+        if attempt < max_retries - 1:
+            sleep(2.0)
+    else:
+        print(f"Download stations_json failed after {max_retries} attempts.")
+        
+    return my_text
 
 
 def save_stations_json(stations_json: str):
@@ -175,19 +192,30 @@ def station_details_local_path(station_code: str) -> Path:
 
 
 def download_station_details(station_code: str) -> str:
-    """Download station details for one station as json text; return it."""
+    """Download station details for one station as json text; return it with retries."""
     station_details_dir.mkdir(parents=True, exist_ok=True)
-
-    response = requests.get(
-        station_details_url(station_code), headers=headers, timeout=60
-    )  # Minute-long timeout
-    # This suffers from the possibility of failure.
-    my_text = response.text
-    if response.status_code != requests.codes.ok:
-        print(
-            f"Download JSON for {station_code} returned error {response.status_code}; blanking file."
-        )
-        my_text = "{}"  # Don't fill with whatever garbage we got; this is valid JSON
+    
+    url = station_details_url(station_code)
+    max_retries = 3
+    my_text = "{}"
+    
+    for attempt in range(max_retries):
+        try:
+            response = requests.get(url, headers=headers, timeout=60)
+            if response.status_code == requests.codes.ok:
+                my_text = response.text
+                break
+            else:
+                print(f"Attempt {attempt + 1} for {station_code} JSON: returned error {response.status_code}.")
+        except requests.exceptions.RequestException as e:
+            print(f"Attempt {attempt + 1} for {station_code} JSON: connection error ({e}).")
+        
+        if attempt < max_retries - 1:
+            sleep(2.0)
+    else:
+        print(f"Download JSON for {station_code} failed after {max_retries} attempts; blanking file.")
+        my_text = "{}"
+        
     return my_text
 
 
@@ -261,15 +289,28 @@ def station_details_html_local_path(station_code: str) -> Path:
 
 
 def download_station_details_html(station_code: str) -> str:
-    """Download station HTML file for one station; return it."""
-    response = requests.get(station_details_html_url(station_code), headers=headers)
-    # This suffers from the possibility of failure.
-    my_text = response.text
-    if response.status_code != requests.codes.ok:
-        print(
-            f"Download HTML for { station_code } returned error { response.status_code }; blanking file."
-        )
-        my_text = ""  # Don't fill with whatever garbage we got; this is valid HTML
+    """Download station HTML file for one station; return it with retries."""
+    url = station_details_html_url(station_code)
+    max_retries = 3
+    my_text = ""
+    
+    for attempt in range(max_retries):
+        try:
+            response = requests.get(url, headers=headers, timeout=60)
+            if response.status_code == requests.codes.ok:
+                my_text = response.text
+                break
+            else:
+                print(f"Attempt {attempt + 1} for {station_code} HTML: returned error {response.status_code}.")
+        except requests.exceptions.RequestException as e:
+            print(f"Attempt {attempt + 1} for {station_code} HTML: connection error ({e}).")
+        
+        if attempt < max_retries - 1:
+            sleep(2.0)
+    else:
+        print(f"Download HTML for {station_code} failed after {max_retries} attempts; blanking file.")
+        my_text = ""
+        
     return my_text
 
 
@@ -486,13 +527,12 @@ if __name__ == "__main__":
     arg_parser = make_arg_parser()
     args = arg_parser.parse_args()
 
-    match args.command_name:
-        case None:
-            arg_parser.print_help()
-        case "download" | "down" | "d":
-            if args.station_code is None:
-                download_all_stations(sleep_secs=args.sleep_secs)
-            else:
-                download_one_station(str.upper(args.station_code))
-        case "process" | "p":
-            do_station_processing()
+    if args.command_name is None:
+        arg_parser.print_help()
+    elif args.command_name in ("download", "down", "d"):
+        if args.station_code is None:
+            download_all_stations(sleep_secs=args.sleep_secs)
+        else:
+            download_one_station(str.upper(args.station_code))
+    elif args.command_name in ("process", "p"):
+        do_station_processing()
