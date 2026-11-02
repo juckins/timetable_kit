@@ -4,6 +4,9 @@
 """Patch known errors in Amtrak GTFS.
 
 This should be reviewed every time Amtrak releases a new GTFS.
+
+Change Log:
+2026-11-02  C.Juckins  Added patch for new "PCT" Vancouver, BC permanent DST timezone.
 """
 # TODO: all the Amtrak-specific stuff needs to be made object oriented in an "Amtrak object" perhaps
 
@@ -12,6 +15,32 @@ from timetable_kit.feed_enhanced import FeedEnhanced
 
 # Add the wheelchair boarding information from JSON into the GTFS
 from timetable_kit.amtrak.access import patch_add_wheelchair_boarding
+
+PCT_tz_stops_list = [
+    # Cascades
+    "VAC",  # Vancouver, BC
+]
+
+
+def patch_PCT(feed: FeedEnhanced):
+    """Patch for Vancouver PCT timezone problems.
+
+    Fix feed in place.
+    """
+    assert feed.stops is not None  # Silence MyPy
+    stops = feed.stops
+    for index in stops.index:
+        if stops.loc[index, "stop_id"] in PCT_tz_stops_list:
+            if stops.loc[index, "stop_timezone"] == "America/Los_Angeles":
+                stops.loc[index, "stop_timezone"] = "America/Vancouver"
+                debug_print(
+                    1,
+                    "Found Vancouver or PCT station with wrong timezone: patched stop_timezone",
+                )
+    # Patch feed in place
+    feed.stops = stops
+    return
+
 
 arizona_stops_list = [
     # Sunset Limited
@@ -250,6 +279,9 @@ def patch_feed(feed: FeedEnhanced):
 
     # Arizona time zone problems
     patch_arizona(new_feed)
+
+    # Vancouver (PCT) time zone problems
+    patch_PCT(new_feed)
 
     # Buses listed as trains fixes
     patch_buses(new_feed)
