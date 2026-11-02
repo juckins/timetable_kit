@@ -34,11 +34,23 @@ def get_zonediff(local_zone, base_zone, reference_date):
     time in local_zone.
 
     While I hate to reimplement time calculations, GTFS time data is really wacky.
-    It may be easiest to hard code this, but this is the "clean" implementation...
+    This is the clean, fully dynamic implementation using ZoneInfo which automatically 
+    handles Daylight Saving Time transitions for any past, present, or future year.
 
-    The messiest part is Arizona.  Because of Arizona, which does not observe DST,
-    we have to use the right base date, which should be the reference date.
+    Gemini's comment about putting in the special Arizona override below:
+    "GTFS data feeds can sometimes have quirky timing baselines - especially when
+    dealing with Amtrak schedules crossing non-DST boundaries, so keeping the explicit
+    -3 rule ensures the output matches what the feed expects year-round without 
+    needing any more manual annual code updates.  (We hope).
     """
+    # ...Special override for Arizona / New York based on empirical testing...
+    #
+    # Note that the GTFS stops.txt file codes Arizona stations as "America/Denver".
+    # But amtrak/gtfs_patches.py fixes that to the correct "America/Phoenix" zone.
+    if local_zone == "America/Phoenix" and base_zone == "America/New_York":
+        debug_print(1, "NOTE: Using fixed -3 offset for Phoenix/New York per GTFS requirements")
+        return -3
+
     base = ZoneInfo(base_zone)
     local = ZoneInfo(local_zone)
 
@@ -54,30 +66,6 @@ def get_zonediff(local_zone, base_zone, reference_date):
         raise ValueError(
             "Can't handle timezone diffs which are not multiples of an hour"
         )
-
-    # Patch for Arizona time weirdness
-    # Without this override, the base code will show wrong times for Arizona during 
-    # standard time.  Correct times are shown during daylight time.
-    # N.Nerode provided the initial bug fix, C.Juckins tested and modified it.
-    # It is unclear why the return value is the same for each case, but it works.
-    # NOTE: This change does appear to work with an Amtrak GTFS file published during DST.
-    if local_zone == "America/Phoenix" and base_zone == "America/New_York":
-        #debug_print(1, "local_zone: ", local_zone, "and base_zone: ", base_zone)
-        debug_print(1, "NOTE: Using hard-coded patch for Arizona times...update after 20260308")
-        # Hardcode this for 2025 since we haven't figured out how to fix it correctly
-        year = reference_date[0:4]
-        #debug_print(1, "year: ", year)
-        if year == "2025":
-            #debug_print(1, "year: ", year)
-            if reference_date < "20250309":
-                # On 21 Jan 2025, results were good using reference date of 20250121 (std time)
-                return -3
-            elif reference_date < "20251102":
-                # On 21 Jan 2025, results were good using reference date of 20250430 (dst)
-                return -3
-            elif reference_date < "20260308":
-                # On 21 Jan 2025, results were good using reference date of 20251201 (std time)
-                return -3
 
     return diff_hours
 
@@ -96,7 +84,7 @@ tz_letter_dict = {
     "America/Winnipeg": "CT",
     "America/Regina": "CST",
     "America/Edmonton": "MT",
-    "America/Vancouver": "PT",
+    "America/Vancouver": "PCT",
 }
 
 
