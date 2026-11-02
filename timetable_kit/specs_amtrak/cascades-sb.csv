@@ -2,7 +2,7 @@
 column-options,,,,,ardp,,,,,,,ardp
 route-name,,,,,,,,,,,,
 days,,,,,SEA,SEA,SEA,SEA,SEA,SEA,SEA,SEA
-VAC,,0,,PCT,blank,blank,"<div style=""text-align: center;"">Bus<br>service</div> ",,blank,blank,"<div style=""text-align: center;"">Bus<br>service</div> ",
+VAC,,0,,,blank,blank,"<div style=""text-align: center;"">Bus<br>service</div> ",,blank,blank,"<div style=""text-align: center;"">Bus<br>service</div> ",
 BEL,,62,,,blank,blank,"<div style=""text-align: center;"">operates<br>to</div> ",,5605 first two_row,5677 first two_row,"<div style=""text-align: center;"">operates<br>to</div> ",
 MVW,,88,,,blank,blank,"<div style=""text-align: center;"">Seattle</div> ",,,,"<div style=""text-align: center;"">Seattle</div> ",
 STW,,103,,,blank,blank,downarrow,,5605 blank,5677 blank,downarrow,

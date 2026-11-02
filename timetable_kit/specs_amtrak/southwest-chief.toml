@@ -1,7 +1,7 @@
 title = "Southwest Chief Timetable"
 heading = "Southwest Chief"
 aria_label = "Southwest Chief"
-reference_date = "20261103"
+reference_date = "20261110"
 key_on_right = true
 key_baggage = true
 key_d = true
