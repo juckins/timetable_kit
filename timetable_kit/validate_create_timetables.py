@@ -2,9 +2,9 @@
 
 """
 TODO:
-For the .list trains, suggest running all the index numbers first with the -r -f -a 
+For the .list trains, suggest running all the index numbers first with the -r -a 
 so the spec files are updated individually, getting the correct date.  Then go back
-and run one index for that .list train with the -r -a flags (test this).
+and run one index for that .list train with the -r -a -g flags (test this).
 """
 
 """
@@ -46,7 +46,9 @@ MATCH: Train numbers are identical.
 Using the command-line argument (-r / --run-create), this script will also 
 create timetables after checking the spec files for validation of train numbers 
 and dates.  The output directory, author, and other settings can be configured 
-globally or overridden via CLI flags.
+globally or overridden via CLI flags. By default, timetable creation uses individual 
+CSV files. Use the -g / --group flag to generate timetables using group spec 
+(.list) files after validating all member CSVs in that group.
 
 Usage Examples:
     # List detailed help and running instructions:
@@ -68,12 +70,16 @@ Usage Examples:
     ./validate_create_timetables.py -c 0 1 2 -p
     ./validate_create_timetables.py -c 0-5 -p
 
-    # Like the command above, but then generate the timetables for spec files 
-    # that pass their checks:
+    # Like the command above, but then generate the individual timetables for spec files 
+    # that pass their checks (the default behavior with -r):
     ./validate_create_timetables.py -c Acela -r
     ./validate_create_timetables.py -c 0 1 5 -r
 
-    # Run and check specific check files, generate the timetables, but also use the "-a" flag
+    # Generate timetables using group spec (.list) files (-g), ensuring all individual 
+    # CSVs in the group pass validation first:
+    ./validate_create_timetables.py -c Acela -r -g
+
+    # Run and check specific check files, generate individual timetables, but also use the "-a" flag
     # to try and get around the "No trip found" errors using "auto-recovery":
     ./validate_create_timetables.py -c Crescent -r -a
     ./validate_create_timetables.py -c 15 16 -r -a
@@ -81,10 +87,6 @@ Usage Examples:
     # Like the command above, but use the "-w 3" flag to look for dates 3 weeks out.
     # This is for the Empire Service:
     ./validate_create_timetables.py -c 17 18 19 20 -r -a -w 3
-
-    # Force individual timetable creation using each .csv file (for trains with 
-    # a .list file) to help with debugging/troubleshooting:
-    ./validate_create_timetables.py -c Acela -r -f
 
     # Run timetable generation using custom output directory or author credit:
     ./validate_create_timetables.py -c 0 1 2 -r --output-dir ./out --author "Your Name <url>"
@@ -120,22 +122,21 @@ Change Log:
                           values, individual indices, ranges, and text queries.
 2026-10-11  AI/C.Juckins  Enhancements for advanced timetable creation and troubleshooting:
                           Added a new argument --combine-pdfs that combines separate PDF files for .list 
-                          spec files (requires -r, -a, and -f).  This can be used when a .list PDF fails
+                          spec files (requires -r and -a).  This can be used when a .list PDF fails
                           to be created because of 'No trip found' errors.
                           Similarly, the new argument --combine-htmls will combine separate HTML pages 
-                          for .list spec files (also requires -r, -a, and -f) when a .list HTML fails 
+                          for .list spec files (also requires -r and -a) when a .list HTML fails 
                           to get created.  NOTE: --combine-htmls requires Ghostscript 'gs' on linux.
-                          An example command to use these options is the following:
+                          An example command to use with these "combine" options is the following:
 
-                          ./validate_create_timetables.py -c 12-13 -w 3 -r -a -f --combine-pdfs --combine-htmls
+                          ./validate_create_timetables.py -c 12-13 -w 3 -r -a --combine-pdfs --combine-htmls
 
                           -c 12-13: the 2 Carolinian spec files.
                               -w 3: looks for a valid date 3 weeks out.
                                 -r: runs timetable creation to make the PDFs/HTML files.
                                 -a: automatically searches for a valid reference date and retries timetable
                                     creation if 'No trip found' error occurs.
-                                -f: forces timetable generation for individual spec files, ignoring group 
-                                    list files (useful when the .list fails to get created).
+
 2026-10-13  AI/C.Juckins  Fix bug when checking valid days frequency problems.
 2026-10-24  C.Juckins     Added a "split" Vermonter (weekdays and weekends separated). Only way to create
                           a document when GTFS data is wonky and you need to create the weekday with 1 
@@ -144,6 +145,9 @@ Change Log:
                           files, like this:
                           $ gs -dNOPAUSE -sDEVICE=pdfwrite -sOUTPUTFILE=vermonter.pdf \
                             -dBATCH vermonter-split-weekend.pdf vermonter-split-weekday.pdf
+2026-11-03  AI/C.Juckins  Changed default timetable creation behavior to use individual CSV files
+                          instead of group spec files. Added new -g / --group option to create
+                          timetables using group files after validating all member CSVs. Removed legacy -f flag.
 """
 
 import argparse
@@ -1195,24 +1199,24 @@ def main():
         help="Run timetable creation command for checks that pass validation"
     )
     parser.add_argument(
+        "-g", "--group",
+        action="store_true",
+        help="Create timetable using group (.list) files if available, after validating all individual CSV files in that group"
+    )
+    parser.add_argument(
         "-a", "--auto-recover",
         action="store_true",
         help="Automatically search for a valid reference date and retry if a timetable creation fails with 'No trip found'"
     )
     parser.add_argument(
-        "-f", "--force-individual",
-        action="store_true",
-        help="Force timetable generation for individual check specs, ignoring group list files"
-    )
-    parser.add_argument(
         "--combine-pdfs",
         action="store_true",
-        help="Combine separate PDF files for .list spec files (requires -r, -a, and -f)"
+        help="Combine separate PDF files for .list spec files (requires -r and -a)"
     )
     parser.add_argument(
        "--combine-htmls",
         action="store_true",
-        help="Combine separate HTML pages for .list spec files (requires -r, -a, and -f) - NOTE: this requires 'gs' on linux"
+        help="Combine separate HTML pages for .list spec files (requires -r and -a) - NOTE: this requires 'gs' on linux"
     )
     parser.add_argument(
         "--output-dir",
@@ -1252,10 +1256,14 @@ def main():
     results = {}
     ok_filenames = set()
 
-    candidate_specs = []
-    failed_specs = set()
-    individual_specs_to_create = []
     list_spec_groups = {} # Maps .list spec names to lists of generated PDF paths
+
+    # Map group specs to all their member CSV stems across CHECKS
+    group_to_checks = {}
+    for check_item in CHECKS:
+        spec = check_item.get("spec")
+        if spec and spec.endswith(".list"):
+            group_to_checks.setdefault(spec, []).append(check_item["csv"].stem)
 
     for idx, check in checks_to_run:
         matched = run_check(
@@ -1267,37 +1275,64 @@ def main():
         results[f"[{idx:2d}] {check['name']}"] = matched
         
         csv_stem = check["csv"].stem
-        spec_target = csv_stem if args.force_individual else check.get("spec", csv_stem)
+        group_spec = check.get("spec")
         
-        # Track .list group associations for PDF combination when force-individual is active
-        list_spec = check.get("spec")
-        if list_spec and list_spec.endswith(".list"):
+        # Track .list group associations for PDF/HTML combination
+        if group_spec and group_spec.endswith(".list"):
             pdf_path = args.output_dir / f"{csv_stem}.pdf"
-            list_spec_groups.setdefault(list_spec, []).append(pdf_path)
+            list_spec_groups.setdefault(group_spec, []).append(pdf_path)
 
         if matched:
             ok_filenames.add(check["csv"].name)
             ok_filenames.add(check["csv"].with_suffix(".toml").name)
 
-            if args.run_create:
-                if args.force_individual:
-                    if csv_stem not in individual_specs_to_create:
-                        individual_specs_to_create.append(csv_stem)
-                elif spec_target not in candidate_specs:
-                    candidate_specs.append(spec_target)
-        else:
-            if args.force_individual and args.run_create:
-                if csv_stem not in individual_specs_to_create:
-                    individual_specs_to_create.append(csv_stem)
-            else:
-                failed_specs.add(spec_target)
+    # Determine specs to create based on default (individual) vs group (-g) mode
+    specs_to_create = []
+    skipped_specs = []
 
-    if args.force_individual:
-        specs_to_create = individual_specs_to_create
-        skipped_specs = []
-    else:
-        specs_to_create = [s for s in candidate_specs if s not in failed_specs]
-        skipped_specs = sorted(failed_specs)
+    if args.run_create:
+        if args.group:
+            # Group mode (-g): Create timetable using group spec if all member CSVs passed validation
+            target_group_specs = set()
+            for idx, check in checks_to_run:
+                if results.get(f"[{idx:2d}] {check['name']}"):
+                    gspec = check.get("spec")
+                    if gspec and gspec.endswith(".list"):
+                        target_group_specs.add(gspec)
+                    elif not gspec:
+                        if check["csv"].stem not in specs_to_create:
+                            specs_to_create.append(check["csv"].stem)
+
+            for gspec in target_group_specs:
+                member_stems = group_to_checks.get(gspec, [])
+                all_members_passed = True
+                for stem in member_stems:
+                    stem_passed = False
+                    for c_idx, c_item in enumerate(CHECKS):
+                        if c_item["csv"].stem == stem:
+                            c_key = f"[{c_idx:2d}] {c_item['name']}"
+                            if results.get(c_key) is True:
+                                stem_passed = True
+                                break
+                    if not stem_passed:
+                        all_members_passed = False
+                        break
+
+                if all_members_passed:
+                    if gspec not in specs_to_create:
+                        specs_to_create.append(gspec)
+                else:
+                    print(f"  [NOTICE] Group spec '{gspec}' skipped because not all individual CSV files in this group passed validation.")
+                    skipped_specs.append(gspec)
+        else:
+            # Default mode: Individual CSV spec for each passing check
+            for idx, check in checks_to_run:
+                if results.get(f"[{idx:2d}] {check['name']}"):
+                    csv_stem = check["csv"].stem
+                    if csv_stem not in specs_to_create:
+                        specs_to_create.append(csv_stem)
+                else:
+                    skipped_specs.append(check["csv"].stem)
 
     # Optional Timetable Generation & HTML Validation Phase
     created_timetables = []
@@ -1340,7 +1375,7 @@ def main():
     # PDF Combination Phase (Restricted to .list spec files)
     # ---------------------------------------------------------------------------
     if args.combine_pdfs:
-        if args.run_create and args.auto_recover and args.force_individual:
+        if args.run_create and args.auto_recover:
             print("\n=== Combining PDF Files for .list Specs ===")
             if not list_spec_groups:
                 print("  No .list spec files found among the processed checks.")
@@ -1384,7 +1419,6 @@ def main():
             missing_flags = []
             if not args.run_create: missing_flags.append("-r")
             if not args.auto_recover: missing_flags.append("-a")
-            if not args.force_individual: missing_flags.append("-f")
             
             print(f"\nLOG ENTRY: '--combine-pdfs' was requested, but missing required argument(s): {', '.join(missing_flags)}. Skipping PDF combination and continuing.")
 
@@ -1392,7 +1426,7 @@ def main():
     # HTML Combination Phase (Restricted to .list spec files)
     # ---------------------------------------------------------------------------
     if args.combine_htmls:
-        if args.run_create and args.auto_recover and args.force_individual:
+        if args.run_create and args.auto_recover:
             print("\n=== Combining HTML Files for .list Specs ===")
             if not list_spec_groups:
                 print("  No .list spec files found among the processed checks.")
@@ -1503,7 +1537,6 @@ def main():
             missing_flags = []
             if not args.run_create: missing_flags.append("-r")
             if not args.auto_recover: missing_flags.append("-a")
-            if not args.force_individual: missing_flags.append("-f")
 
             print(f"\nLOG ENTRY: '--combine-htmls' was requested, but missing required argument(s): {', '.join(missing_flags)}. Skipping HTML combination and continuing.")
 
@@ -1548,13 +1581,12 @@ def main():
             for spec, code in failed_generations:
                 print(f"  [FAILED]    {spec} (Exit Status: {code})")
 
-        if not args.force_individual:
-            print("\n=== Skipped Timetables ===")
-            if skipped_specs:
-                for spec in skipped_specs:
-                    print(f"  [SKIPPED]   {spec}")
-            else:
-                print("  No timetables were skipped.")
+        print("\n=== Skipped Timetables ===")
+        if skipped_specs:
+            for spec in skipped_specs:
+                print(f"  [SKIPPED]   {spec}")
+        else:
+            print("  No timetables were skipped.")
 
         print("\n=== HTML Validation Problems (check 'days' frequency [Daily, Mo-Fr, etc]. ===")
         if html_warnings_collection:
