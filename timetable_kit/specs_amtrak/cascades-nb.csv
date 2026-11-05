@@ -1,25 +1,25 @@
-,stations,mile,access,timezone,516,500 / 5622 noheader,502,504 / 5604 noheader,518,14,506,508
-column-options,,,,,ardp,,,,,,,ardp
-route-name,,,,,,,,,,,,
-days,,,,,SEA,SEA,SEA,SEA,SEA,SEA,SEA,SEA
-origin,,,,,,,,,,,,
-EUG,,0,,,blank,,"<div style=""text-align: center;"">Bus<br>service</div> ",,"<div style=""text-align: center;"">Bus<br>service</div> ",14 first two_row,"<div style=""text-align: center;"">Bus<br>service</div> ",
-ALY,,43,,,blank,,"<div style=""text-align: center;"">operates</div> ",,"<div style=""text-align: center;"">operates</div> ",,"<div style=""text-align: center;"">operates</div> ",
-SLM,,71,,,blank,,"<div style=""text-align: center;"">to</div> ",,"<div style=""text-align: center;"">to</div> ",,"<div style=""text-align: center;"">to</div> ",
-ORC,,108,,,blank,,"<div style=""text-align: center;"">Portland</div> ",,"<div style=""text-align: center;"">Portland</div> ",,"<div style=""text-align: center;"">Portland</div> ",
-PDX,,123,,,blank,blank,downarrow,504 last two_row,downarrow,14 last two_row,downarrow,508 last two_row
-PDX,,123,,,blank,,502 first two_row,504 first two_row,518 first two_row,14 first two_row,506 first two_row,508 first two_row
-VAN,,133,,,blank,,,,,,,
-KEL,,173,,,blank,,,,,,,
-CTL,,216,,,blank,,,,,,,
-OLW,,235,,,blank,,,,,,,
-TAC,,271,,,blank,,,,,,,
-TUK,,299,,,blank,,,,,,,
-SEA,,310,,,blank,,502 last,504 last,518 last two_row,14 last,506 last,508 last
-SEA,,310,,,516 first two_row,5622 first two_row,"<div style=""text-align: center;"">Bus<br>service</div> ",5604 first two_row,518 first two_row,"<div style=""text-align: center;"">Bus<br>service</div> ",blank,blank
-EDM,,328,,,,5622 blank,"<div style=""text-align: center;"">operates</div> ",5604 blank,,"<div style=""text-align: center;"">operates</div> ",blank,blank
-EVR,,344,,,,,"<div style=""text-align: center;"">to</div> ",,,"<div style=""text-align: center;"">to</div> ",blank,blank
-STW,,364,,,,5622 blank,"<div style=""text-align: center;"">Vancouver</div> ",5604 blank,,"<div style=""text-align: center;"">Vancouver</div> ",blank,blank
-MVW,,379,,,,,downarrow,,,downarrow,blank,blank
-BEL,,405,,,,5622 last,downarrow,5604 last,,downarrow,blank,blank
-VAC,,467,,,,,downarrow,,,downarrow,blank,blank
+,stations,mile,access,timezone,516,custom-Bus,500 / 5622 noheader,502,504 / 5604 noheader,custom-Bus,518,14,custom-Bus,506,508,custom-Bus
+column-options,,,,,ardp,,,,,,,,,,ardp,
+route-name,,,,,,Chartered<br>Vehicle,,,,Chartered<br>Vehicle,,,Chartered<br>Vehicle,,,Chartered<br>Vehicle
+days,,,,,SEA,Daily,SEA,SEA,SEA,Daily,SEA,SEA,Daily,SEA,SEA,Daily
+origin,,,,,,,,,,,,,,,,
+EUG,,0,,,blank,,,"bus:<div style=""text-align: center;""><br><b>5:10A</b></div> ",,,"bus:<div style=""text-align: center;""><br><b>10:50A</b></div> ",14 first two_row,"bus:<div style=""text-align: center;""><br><b>1:00P</b></div> ","bus:<div style=""text-align: center;""><br><b>2:30P</b></div> ",508 first two_row,"bus:<div style=""text-align: center;""><br><b>6:10P</b></div> "
+ALY,,43,,,blank,,,"bus:<div style=""text-align: center;"">Bus to</div> ",,,"bus:<div style=""text-align: center;"">Bus to</div> ",,"bus:<div style=""text-align: center;"">Bus to</div> ","bus:<div style=""text-align: center;"">Bus to</div> ",,"bus:<div style=""text-align: center;"">Bus to</div> "
+SLM,,71,,,blank,,,"bus:<div style=""text-align: center;"">Portland</div> ",,,"bus:<div style=""text-align: center;"">Portland</div> ",,"bus:<div style=""text-align: center;"">Portland</div> ","bus:<div style=""text-align: center;"">Portland</div> ",,"bus:<div style=""text-align: center;"">Portland</div> "
+ORC,,108,,,blank,,,bus:downarrow,,,bus:downarrow,,bus:downarrow,bus:downarrow,,bus:downarrow
+PDX,,123,,,blank,,blank,"bus:<div style=""text-align: center;""><b>8:00A</b></div> ",504 last two_row,,"bus:<div style=""text-align: center;""><b>1:40P</b></div> ",14 last two_row,"bus:<div style=""text-align: center;""><b>4:00P</b></div> ","bus:<div style=""text-align: center;""><b>5:15P</b></div> ",508 last two_row,"bus:<div style=""text-align: center;""><b>9:05P</b></div> "
+PDX,,123,,,blank,,,502 first two_row,504 first two_row,,518 first two_row,14 first two_row,,506 first two_row,508 first two_row,
+VAN,,133,,,blank,,,,,,,,,,,
+KEL,,173,,,blank,,,,,,,,,,,
+CTL,,216,,,blank,,,,,,,,,,,
+OLW,,235,,,blank,,,,,,,,,,,
+TAC,,271,,,blank,,,,,,,,,,,
+TUK,,299,,,blank,,,,,,,,,,,
+SEA,,310,,,blank,,,502 last,504 last,,518 last two_row,14 last,,506 last,508 last,
+SEA,,310,,,516 first two_row,"bus:<div style=""text-align: center;""><br><b>10:45A</b></div> ",5622 first two_row,"bus:<div style=""text-align: center;""><br><b>1:30P</b></div> ",5604 first two_row,"bus:<div style=""text-align: center;""><br><b>4:45P</b></div> ",518 first two_row,"bus:<div style=""text-align: center;""><br><b>8:00P</b></div> ",,blank,blank,
+EDM,,328,,,,"bus:<div style=""text-align: center;"">Bus to</div> ",5622 blank,"bus:<div style=""text-align: center;"">Bus to</div> ",5604 blank,"bus:<div style=""text-align: center;"">Bus to</div> ",,"bus:<div style=""text-align: center;"">Bus to</div> ",,blank,blank,
+EVR,,344,,,,"bus:<div style=""text-align: center;"">Vancouver</div> ",,"bus:<div style=""text-align: center;"">Vancouver</div> ",,"bus:<div style=""text-align: center;"">Vancouver</div> ",,"bus:<div style=""text-align: center;"">Vancouver</div> ",,blank,blank,
+STW,,364,,,,bus:downarrow,5622 blank,bus:downarrow,5604 blank,bus:downarrow,,bus:downarrow,,blank,blank,
+MVW,,379,,,,bus:downarrow,,bus:downarrow,,bus:downarrow,,bus:downarrow,,blank,blank,
+BEL,,405,,,,bus:downarrow,5622 last,bus:downarrow,5604 last,bus:downarrow,,bus:downarrow,,blank,blank,
+VAC,,467,,,,"bus:<div style=""text-align: center;""><b>3:15P</b></div> ",bus:blank,"bus:<div style=""text-align: center;""><b>6:00P</b></div> ",bus:blank,"bus:<div style=""text-align: center;""><b>9:15P</b></div> ",,"bus:<div style=""text-align: center;""><b>12:15A</b></div> ",,blank,blank,

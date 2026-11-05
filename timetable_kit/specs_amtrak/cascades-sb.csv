@@ -1,25 +1,25 @@
-,stations,mile,access,timezone,503,505,11,517,507 / 5605 noheader,509 / 5677 noheader,511,519
-column-options,,,,,ardp,,,,,,,ardp
-route-name,,,,,,,,,,,,
-days,,,,,SEA,SEA,SEA,SEA,SEA,SEA,SEA,SEA
-VAC,,0,,,blank,blank,"<div style=""text-align: center;"">Bus<br>service</div> ",,blank,blank,"<div style=""text-align: center;"">Bus<br>service</div> ",
-BEL,,62,,,blank,blank,"<div style=""text-align: center;"">operates<br>to</div> ",,5605 first two_row,5677 first two_row,"<div style=""text-align: center;"">operates<br>to</div> ",
-MVW,,88,,,blank,blank,"<div style=""text-align: center;"">Seattle</div> ",,,,"<div style=""text-align: center;"">Seattle</div> ",
-STW,,103,,,blank,blank,downarrow,,5605 blank,5677 blank,downarrow,
-EVR,,123,,,blank,blank,downarrow,,,,downarrow,
-EDM,,139,,,blank,blank,downarrow,,5605 blank,5677 blank,downarrow,
-SEA,,157,,,blank,blank,downarrow,517 last two_row,5605 last two_row,5677 last two_row,downarrow,519 last two_row
-SEA,,157,,,503 first two_row,505 first two_row,11 first two_row,517 first two_row,507 first two_row,509 first two_row,511 first two_row,blank
-TUK,,168,,,,,,,,,,blank
-TAC,,196,,,,,,,,,,blank
-OLW,,232,,,,,,,,,,blank
-CTL,,251,,,,,,,,,,blank
-KEL,,294,,,,,,,,,,blank
-VAN,,334,,,,,,,,,,blank
-PDX,,344,,,503 last two_row,505 last two_row,11 last two_row,517 last two_row,507 last two_row,509 last two_row,511 last two_row,blank
-PDX,,344,,,503 first two_row,"<div style=""text-align: center;"">Bus<br>service</div> ",11 first two_row,"<div style=""text-align: center;"">Bus<br>service</div> ",507 first two_row,"<div style=""text-align: center;"">Bus<br>service</div> ",blank,blank
-ORC,,359,,,,"<div style=""text-align: center;"">operates</div> ",,"<div style=""text-align: center;"">operates</div> ",,"<div style=""text-align: center;"">operates</div> ",blank,blank
-SLM,,396,,,,"<div style=""text-align: center;"">to</div> ",,"<div style=""text-align: center;"">to</div> ",,"<div style=""text-align: center;"">to</div> ",blank,blank
-ALY,,424,,,,"<div style=""text-align: center;"">Eugene</div> ",,"<div style=""text-align: center;"">Eugene</div> ",,"<div style=""text-align: center;"">Eugene</div> ",blank,blank
-EUG,,467,,,,downarrow,11 last two_row,downarrow,,downarrow,blank,blank
-destination,,,,,,,,,,,,
+,stations,mile,access,timezone,custom-Bus,custom-Bus,503,505,11,517,custom-Bus,507 / 5605 noheader,509 / 5677 noheader,511,519
+column-options,,,,,,,ardp,,,,,ardp,,,ardp
+route-name,,,,,Chartered<br>Vehicle,Chartered<br>Vehicle,,,,,Chartered<br>Vehicle,,,,
+days,,,,,Daily,Daily,SEA,SEA,SEA,SEA,Daily,SEA,SEA,SEA,SEA
+VAC,,0,,,blank,blank,blank,blank,"bus:<div style=""text-align: center;""><br><b>6:30A</b></div> ",517 first two_row,"<div style=""text-align: center;""><br><b>9:30A</b></div> ",bus:blank,bus:blank,"bus:<div style=""text-align: center;""><br><b>4:00P</b></div> ",519 first two_row
+BEL,,62,,,blank,blank,blank,blank,"bus:<div style=""text-align: center;"">Bus<br>to</div> ",517 two_row,"<div style=""text-align: center;"">Bus<br>to</div> ",5605 first two_row,5677 first two_row,"bus:<div style=""text-align: center;"">Bus<br>to</div> ",519 two_row
+MVW,,88,,,blank,blank,blank,blank,"bus:<div style=""text-align: center;"">Seattle</div> ",,"<div style=""text-align: center;"">Seattle</div> ",,,"bus:<div style=""text-align: center;"">Seattle</div> ",
+STW,,103,,,blank,blank,blank,blank,bus:downarrow,,downarrow,5605 blank,5677 blank,bus:downarrow,
+EVR,,123,,,blank,blank,blank,blank,bus:downarrow,,downarrow,,,bus:downarrow,
+EDM,,139,,,blank,blank,blank,blank,bus:downarrow,,downarrow,5605 blank,5677 blank,bus:downarrow,
+SEA,,157,,,blank,blank,blank,blank,"bus:<div style=""text-align: center;""><b>9:00A</b></div>",517 last two_row,"<div style=""text-align: center;""><b>12:15P</b></div> ",5605 last two_row,5677 last two_row,"bus:<div style=""text-align: center;""><b>6:45P</b></div> ",519 last two_row
+SEA,,157,,,blank,blank,503 first two_row,505 first two_row,11 first two_row,517 first two_row,blank,507 first two_row,509 first two_row,511 first two_row,blank
+TUK,,168,,,blank,blank,,,,,blank,,,,blank
+TAC,,196,,,blank,blank,,,,,blank,,,,blank
+OLW,,232,,,blank,blank,,,,,blank,,,,blank
+CTL,,251,,,blank,blank,,,,,blank,,,,blank
+KEL,,294,,,blank,blank,,,,,blank,,,,blank
+VAN,,334,,,blank,blank,,,,,blank,,,,blank
+PDX,,344,,,blank,blank,503 last two_row,505 last two_row,11 last two_row,517 last two_row,blank,507 last two_row,509 last two_row,511 last two_row,blank
+PDX,,344,,,"<div style=""text-align: center;""><br>Dp&nbsp; <b>6:45A</b></div> ","<div style=""text-align: center;""><br><b>10:00A</b></div> ",503 first two_row,"bus:<div style=""text-align: center;""><br><b>12:00P</b></div> ",11 first two_row,"bus:<div style=""text-align: center;""><br><b>5:00P</b></div> ",blank,507 first two_row,"bus:<div style=""text-align: center;""><br><b>9:35P</b></div> ",blank,blank
+ORC,,359,,,"<div style=""text-align: center;"">Bus to</div> ","<div style=""text-align: center;"">Bus to</div> ",,"bus:<div style=""text-align: center;"">Bus to</div> ",,"bus:<div style=""text-align: center;"">Bus to</div> ",blank,,"bus:<div style=""text-align: center;"">Bus to</div> ",blank,blank
+SLM,,396,,,"<div style=""text-align: center;"">Eugene</div> ","<div style=""text-align: center;"">Eugene</div> ",,"bus:<div style=""text-align: center;"">Eugene</div> ",,"bus:<div style=""text-align: center;"">Eugene</div> ",blank,,"bus:<div style=""text-align: center;"">Eugene</div> ",blank,blank
+ALY,,424,,,downarrow,downarrow,,bus:downarrow,,bus:downarrow,blank,,bus:downarrow,blank,blank
+EUG,,467,,,"<div style=""text-align: center;"">Ar&nbsp; <b>9:40A</b></div> ","<div style=""text-align: center;""><b>1:10P</b></div> ",,"bus:<div style=""text-align: center;""><b>2:55P</b></div> ",11 last two_row,"bus:<div style=""text-align: center;""><b>7:55P</b></div> ",blank,,"bus:<div style=""text-align: center;""><b>12:10A</b></div> ",blank,blank
+destination,,,,,,,,,,,,,,,

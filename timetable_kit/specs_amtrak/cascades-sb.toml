@@ -1,10 +1,11 @@
 title = "Cascades Southbound"
 heading = "Cascades: Southbound"
 aria_label = "Cascades Southbound"
-reference_date = "20261110"
-programmers_warning = "Oregon Point buses missing.  Coast Starlight duplicate timetable problems."
-top_text = "NOTE: Additional bus service is offered but not shown on the timetable below.  Check <b><a href=\"https://www.amtrak.com/\">www.amtrak.com</a></b> for the latest information.<br><br>Vancouver, BC (Canada) observes permanent Daylight Saving Time (abbreviation PCT)."
+reference_date = "20261117"
+programmers_warning = "Cantrail and Oregon Point buses coded in by hand. Coast Starlight duplicate timetable problems."
+top_text = "NOTE: Check <b><a href=\"https://www.amtrak.com/\">www.amtrak.com</a></b> for additional bus service details.<br><br>Vancouver, BC (Canada) observes permanent Daylight Saving Time (abbreviation PCT)."
 key_baggage = true
 for_rpa = true
 key_bus = true
 use_bus_icon_in_cells = true
+max_columns_per_page = 8
