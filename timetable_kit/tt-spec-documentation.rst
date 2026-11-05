@@ -121,7 +121,7 @@ Except for special columns, each column should be headed by a train spec.
 
 SPECIAL COLUMNS
 ---------------
-The special code "station" or "stations in the top row can be used to generate cells containing the name and details of the station.  This is retrieved from the Amtrak station data on the Web which is on the web in json format; the json files for the station data must be downloaded in advance, using './amtrak/json_stations.py download' into the ./amtrak/stations/ directory.  This is to avoid beating too hard on Amtrak's website.
+The special code "station" or "stations" in the top row can be used to generate cells containing the name and details of the station.  This is retrieved from the Amtrak station data on the Web which is on the web in json format; the json files for the station data must be downloaded in advance, using './amtrak/json_stations.py download' into the ./amtrak/stations/ directory.  This is to avoid beating too hard on Amtrak's website.
 
 The special code "services" in the top row can be used to generate cells containing icons for the station services.  So far only accessibility is implemented.
 
@@ -138,6 +138,20 @@ Be careful about using this as it is fragile: it is intended for splitting train
 "designed" connecting services such as Lincoln Service / Missouri River Runner at St Louis.
 This will give a complex stacked cell for "train name".
 You will want to do some manual cells (see below).
+
+CUSTOM COLUMNS (NON-GTFS)
+-------------------------
+Columns whose headers start with the prefix "custom-" (for example, "custom-Bus" or "custom-Chartered-Vehicle") bypass GTFS static data processing entirely, allowing you to include hand-written text, service notes, or custom columns (such as dedicated bus or charter runs) where GTFS data is unavailable or unnecessary.
+
+Header Rendering: The text following the "custom-" prefix is displayed as the column header (e.g., "custom-Bus" renders as Bus).
+
+Automatic Styling:
+- Headers, route-name rows, and days-of-week rows automatically inherit proper table cell styling and alignment.
+- Columns with "bus" or "charter" in their key automatically apply the pale pink background color ("color-bus"), with the exception of terminal "origin" and "destination" rows.
+
+Keyword Support: Custom columns automatically evaluate standard layout keywords such as "downarrow", "uparrow", and "blank".
+
+Freeform Text/HTML: Any other free-form text or inline HTML is copied directly into the cell and assigned the "special-cell" class.
 
 
 REST OF SPEC
@@ -177,6 +191,22 @@ A cell may also contain the special code "blank". This is for clarity.  It will 
 space character in the cell; it will show as a white cell.
 
 A cell may also contain a train number followed by the word "blank" ("8 blank").  This will color the cell with the appropriate color for the train number (which must be one of the trains in the column).  This will blank out the cell but with a color.
+
+THE "bus:" CELL PREFIX DIRECTIVE
+----------------------------------
+Any cell in the CSV spec—regardless of whether it is located in a custom column or a regular GTFS train column—can be prefixed with "bus:" to selectively apply the bus background color ("color-bus" / mistyrose) to that specific cell.
+
+Syntax: "bus: <text or keyword>"
+
+Behavior:
+- The rendering engine strips the "bus:" prefix prior to outputting the cell content.
+- It applies the "color-bus" CSS background class to the cell (automatically suppressing the background color on terminal "origin" and "destination" rows).
+
+Example Usage:
+- "bus: Bus service"
+- "bus: operates"
+- "bus: downarrow"
+
 
 There are also some shorthands for common arrows:
 downarrow will give suitable HTML for a down arrow, centered in the cell

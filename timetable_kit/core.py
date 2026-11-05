@@ -6,6 +6,12 @@
 
 core.py contains the core code for handling specs and filling in timetables.
 Includes the TTSpec type.
+
+Change Log:
+2026-11-05  C.Juckins  Add ability for custom column in a spec file to be printed
+                       "as-is", without GTFS processing.  Useful for times when
+                       you want to include a Bus, etc but that data is not available
+                       in the GTFS data.
 """
 
 #########################
@@ -456,7 +462,9 @@ class TTSpec:
         train_specs_list_raw = train_specs_df.to_list()
         train_specs_list_strings = [str(i).strip() for i in train_specs_list_raw]
         train_specs_list = [
-            i for i in train_specs_list_strings if i not in special_column_names
+            i for i in train_specs_list_strings 
+            # Code below added to support custom columns that do not process GTFS data.
+            if i not in special_column_names and not i.lower().startswith("custom-")
         ]
         return train_specs_list
 
@@ -672,6 +680,8 @@ def flatten_train_specs_list(train_specs_list):
             cleaned_train_spec = train_spec.removesuffix("noheader").strip()
             flattened_ts_set.add(cleaned_train_spec)
     flattened_ts_set = flattened_ts_set - special_column_names
+    # Code below added to support custom columns that do not process GTFS data.
+    flattened_ts_set = {ts for ts in flattened_ts_set if not ts.lower().startswith("custom-")}
     return flattened_ts_set
 
 
@@ -990,6 +1000,19 @@ def fill_tt_spec(
                 t.text.iloc[0, x] = text_presentation.get_mile_column_header(
                     doing_html=doing_html
                 )
+            # Case below added to support custom columns that do not process GTFS data.
+            case _ if column_key_str.lower().startswith("custom-"):
+                custom_header_text = column_key_str[7:]  # Removes "custom-" prefix
+                t.text.iloc[0, x] = custom_header_text
+                column_header_css_list.append("col_heading")
+
+                # Apply the Bus Color to header cell if applicable
+                if "bus" in column_key_str.lower() or "charter" in column_key_str.lower():
+                    column_header_css_list.append("color-bus")
+
+                t.classes.iloc[0, x] = " ".join(column_header_css_list)
+                t.th.iloc[0, x] = True
+                t.attributes.iloc[0, x] = 'scope="col" role="columnheader"'
             case _:
                 # it's actually a train, or several trains
                 # Check column options for reverse, days, ardp:
@@ -1065,6 +1088,54 @@ def fill_tt_spec(
 
             # Reset the styler string:
             cell_css_list = [*base_cell_css_list]
+
+            # Code below added to support universal "bus:" cell prefixes 
+            # and custom columns that do not process GTFS data.
+
+            # ---------------------------------------------------------
+            # 1. Check for the spec file "bus:" prefix across ANY column
+            # ---------------------------------------------------------
+            is_bus_prefixed = False
+            raw_cell_text = str(spec.csv.iloc[y, x]).strip()
+            if raw_cell_text.lower().startswith("bus:"):
+                is_bus_prefixed = True
+                raw_cell_text = raw_cell_text[4:].strip()  # Strip off "bus:"
+                # Store the stripped text back into csv so downstream code sees it without "bus:"
+                spec.csv.iloc[y, x] = raw_cell_text
+
+            is_terminal_row = station_code.lower() in ("origin", "destination")
+
+            if is_bus_prefixed and not is_terminal_row:
+                cell_css_list.append("color-bus")
+
+
+            # ---------------------------------------------------------
+            # 2. Process custom columns ("custom-") without GTFS data
+            # ---------------------------------------------------------
+            if column_key_str.lower().startswith("custom-"):
+                # Apply bus color for dedicated bus/charter custom columns
+                is_bus_column = "bus" in column_key_str.lower() or "charter" in column_key_str.lower()
+                if is_bus_column and not is_terminal_row:
+                    cell_css_list.append("color-bus")
+
+                raw_text = spec.csv.iloc[y, x]
+                if station_code.lower() == "route-name":
+                    cell_css_list.append("route-name-cell")
+                    if raw_text:
+                        raw_text = f'<div class="box-route-name">{raw_text}</div>'
+                elif station_code.lower() in ("days", "days-of-week"):
+                    cell_css_list.append("days-of-week-cell")
+                else:
+                    # Standard custom data cell processing
+                    substitution = text_presentation.get_cell_substitution(raw_text)
+                    if substitution is not None:
+                        raw_text = substitution
+                    cell_css_list.append("special-cell")
+
+                t.text.iloc[y, x] = raw_text
+                t.classes.iloc[y, x] = " ".join(cell_css_list)
+                continue  # Skip standard timetable processing for this cell
+
             # Check for cell_codes like "28 last".  This *usually* returns None.
             cell_codes = get_cell_codes(str(spec.csv.iloc[y, x]), train_specs)
 
@@ -1078,6 +1149,10 @@ def fill_tt_spec(
 
             # This is effectively matching row, column, cell contents in spec
             match [station_code.lower(), column_key_str.lower(), spec.csv.iloc[y, x]]:
+                # Code below added to support custom columns that do not process GTFS data.
+                case [_, ck, raw_text] if ck.startswith("custom-"):
+                    cell_css_list.append("special-cell") # or "time-cell" depending on desired alignment
+                    t.text.iloc[y, x] = raw_text
                 case ["", _, ""]:
                     # Make sure blanks become *string* blanks in this line.
                     t.text.iloc[y, x] = ""
@@ -1329,6 +1404,10 @@ def fill_tt_spec(
                     stop_tz = stop_df.iloc[0].stop_timezone
                     cell_css_list.append("timezone-cell")
                     t.text.iloc[y, x] = get_zone_str(stop_tz, doing_html=doing_html)
+                # Case below added to support custom columns that do not process GTFS data.
+                case [_, ck, raw_text] if ck.startswith("custom-"):
+                    cell_css_list.append("time-cell") # or a custom class if preferred
+                    t.text.iloc[y, x] = raw_text
                 case [_, _, _]:
                     # Line led by station code, column led by train numbers,
                     # cell empty or has a "cell code": the normal case -- we need to fill in a time.
