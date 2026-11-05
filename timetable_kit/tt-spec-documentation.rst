@@ -141,7 +141,7 @@ You will want to do some manual cells (see below).
 
 CUSTOM COLUMNS (NON-GTFS)
 -------------------------
-Columns whose headers start with the prefix "custom-" (for example, "custom-Bus" or "custom-Chartered-Vehicle") bypass GTFS static data processing entirely, allowing you to include hand-written text, service notes, or custom columns (such as dedicated bus or charter runs) where GTFS data is unavailable or unnecessary.
+Columns whose headers start with the prefix "custom-" (for example, "custom-Bus" or "custom-Chartered-Vehicle") bypass GTFS static data processing entirely, allowing you to include hand-written text, service notes, or custom columns (such as dedicated bus or charter runs) where GTFS data is unavailable or unnecessary.  A good example of this implementation is the Cascades spec files.  GTFS data is not available for all bus services so those schedules were copied into the spec files by hand using the WSDOT timetable.  
 
 Header Rendering: The text following the "custom-" prefix is displayed as the column header (e.g., "custom-Bus" renders as Bus).
 
