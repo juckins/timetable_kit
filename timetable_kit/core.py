@@ -1103,17 +1103,18 @@ def fill_tt_spec(
                 # Store the stripped text back into csv so downstream code sees it without "bus:"
                 spec.csv.iloc[y, x] = raw_cell_text
 
-            is_terminal_row = station_code.lower() in ("origin", "destination")
+            # Exclude terminal rows (origin, destination) and special layout rows (updown) from bus coloring
+            is_terminal_row = station_code.lower() in ("origin", "destination", "updown")
 
+            # Apply "color-bus" if it's prefixed with "bus:" (and not a terminal/updown row)
             if is_bus_prefixed and not is_terminal_row:
                 cell_css_list.append("color-bus")
-
 
             # ---------------------------------------------------------
             # 2. Process custom columns ("custom-") without GTFS data
             # ---------------------------------------------------------
             if column_key_str.lower().startswith("custom-"):
-                # Apply bus color for dedicated bus/charter custom columns
+                # Apply bus color for dedicated bus/charter custom columns (excluding terminal and updown rows)
                 is_bus_column = "bus" in column_key_str.lower() or "charter" in column_key_str.lower()
                 if is_bus_column and not is_terminal_row:
                     cell_css_list.append("color-bus")
@@ -1125,6 +1126,13 @@ def fill_tt_spec(
                         raw_text = f'<div class="box-route-name">{raw_text}</div>'
                 elif station_code.lower() in ("days", "days-of-week"):
                     cell_css_list.append("days-of-week-cell")
+                elif station_code.lower() == "updown":
+                    cell_css_list.append("updown-cell")
+                    # If the cell is blank, automatically generate "Read Up" or "Read Down" 
+                    # based on the reverse column option; otherwise, pass custom raw text through.
+                    if not raw_text:
+                        reverse = "reverse" in column_options[x]
+                        raw_text = text_presentation.style_updown(reverse, doing_html=doing_html)
                 else:
                     # Standard custom data cell processing
                     substitution = text_presentation.get_cell_substitution(raw_text)
