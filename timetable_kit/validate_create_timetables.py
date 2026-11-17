@@ -148,6 +148,9 @@ Change Log:
 2026-11-03  AI/C.Juckins  Changed default timetable creation behavior to use individual CSV files
                           instead of group spec files. Added new -g / --group option to create
                           timetables using group files after validating all member CSVs. Removed legacy -f flag.
+2026-11-08  AI/C.Juckins  Added green banner output when station data is less than 60 days old.  Make it red
+#                         if older.  This is done as a reminder to keep station services, etc fresh and 
+                          current.
 """
 
 import argparse
@@ -176,6 +179,9 @@ DEFAULT_AUTHOR = 'Christopher Juckins <a href="https://juckins.net">https://juck
 
 GTFS_FILE_PATH = Path.home() / ".local/share/timetable_kit/amtrak/gtfs.zip"
 GTFS_MAX_AGE_HOURS = 36
+
+STATIONS_FILE_PATH = Path.home() / ".local/share/timetable_kit/amtrak/stations/data.stations.json"
+STATIONS_MAX_AGE_DAYS = 60
 
 WEEKDAYS = {
     "monday": 0, "tuesday": 1, "wednesday": 2, "thursday": 3,
@@ -805,9 +811,43 @@ def check_gtfs_file_age() -> bool:
     color = RED_BOLD if is_warning else GREEN_BOLD
     
     print(f"\n{color}{border}")
-    print(f"* {msg} *")
+    print(f"{msg}")
     print(f"{border}{RESET}\n")
     
+    return is_warning
+
+
+def check_stations_file_age() -> bool:
+    """Checks stations data file age. Prints a red warning if missing or >60 days old. 
+    Returns True if an age warning was triggered, False if OK.
+    """
+    if not STATIONS_FILE_PATH.exists():
+        msg = f"STATIONS DATA WARNING: Data file does not exist at {STATIONS_FILE_PATH}"
+        is_warning = True
+    else:
+        mtime = STATIONS_FILE_PATH.stat().st_mtime
+        age_seconds = time.time() - mtime
+        age_days = age_seconds / 86400.0  # 24 * 3600 seconds per day
+
+        if age_days > STATIONS_MAX_AGE_DAYS:
+            msg = (
+                f"STATIONS WARNING: STATIONS file ({STATIONS_FILE_PATH}) is {age_days:.1f} days old.\n"
+                f"This exceeds the {STATIONS_MAX_AGE_DAYS}d threshold. You can run the command "
+                f"'amtrak/json_stations.py download' to update Amtrak station data.\nIt will take "
+                f"several hours to run to prevent requests from being blocked by the Amtrak web server."
+            )
+            is_warning = True
+        else:
+            msg = f"STATIONS DATA OK: Data file is current ({age_days:.1f} days old)."
+            is_warning = False
+
+    border = "*" * 65
+    color = RED_BOLD if is_warning else GREEN_BOLD
+
+    print(f"\n{color}{border}")
+    print(f"{msg}")
+    print(f"{border}{RESET}\n")
+
     return is_warning
 
 
@@ -1235,6 +1275,9 @@ def main():
     # Initial GTFS status check at script startup
     check_gtfs_file_age()
 
+    # Initial stations data status check at script startup
+    check_stations_file_age()
+
     if args.list:
         print("Available Checks:")
         for idx, check in enumerate(CHECKS):
@@ -1597,6 +1640,9 @@ def main():
 
     # Final GTFS status check at conclusion
     check_gtfs_file_age()
+
+    # Final stations data status check at conclusion
+    check_stations_file_age()
 
     overall_success = all_ok and len(failed_generations) == 0
     sys.exit(0 if overall_success else 1)
