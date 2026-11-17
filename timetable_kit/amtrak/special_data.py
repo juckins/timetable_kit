@@ -117,7 +117,7 @@ hiawatha_trains = train_number_range(320, 350)
 # This produces a set.
 other_checked_baggage_day_trains = {
     "42",
-    "43",  # Pennsylvanian
+    "45",  # Pennsylvanian (used to be on #43)
     "79",
     "80",  # Carolinian
     "71",  # Piedmont
